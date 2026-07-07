@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Siraj (سراج) — AI Financial Copilot | Project Hub</title>
-  <meta name="description" content="Siraj is an AI-first Financial App that transforms banking data into intelligent financial guidance for the Saudi market.">
+  <meta name="description"
+    content="Siraj is an AI-first Financial App that transforms banking data into intelligent financial guidance for the Saudi market.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
     /* ═══════════════════════════════════════════════════════════
        DESIGN SYSTEM — Alinma Premium
        ═══════════════════════════════════════════════════════════ */
     :root {
-      --primary: #112240;
-      --primary-light: #404D65;
-      --primary-dark: #0b1528;
+      --primary: #7374c7;
+      --primary-light: #8c8dd5;
+      --primary-dark: #5d5e9f;
       --secondary: #BD704D;
       --secondary-light: #d38461;
       --accent: #8485D0;
@@ -48,10 +52,10 @@
       --radius-xl: 24px;
       --radius-full: 9999px;
 
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.06);
-      --shadow-lg: 0 8px 30px rgba(0,0,0,0.08);
-      --shadow-xl: 0 20px 60px rgba(0,0,0,0.1);
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+      --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.1);
       --shadow-accent: 0 4px 20px rgba(25, 167, 168, 0.2);
 
       --font-sans: 'Inter', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -60,8 +64,18 @@
     }
 
     /* ═══════════════ RESET & BASE ═══════════════ */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: var(--font-sans);
       background: var(--bg);
@@ -95,7 +109,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,59,92,0.3);
+      box-shadow: 0 2px 20px rgba(0, 59, 92, 0.3);
     }
 
     .logo-group {
@@ -137,20 +151,20 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255, 255, 255, 0.12);
       color: var(--text-inverse);
       text-decoration: none;
       padding: 8px 16px;
       border-radius: var(--radius-full);
       font-size: 0.8125rem;
       font-weight: 500;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       transition: var(--transition);
     }
 
     .github-link:hover {
-      background: rgba(255,255,255,0.2);
-      border-color: rgba(255,255,255,0.3);
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
       transform: translateY(-1px);
     }
 
@@ -229,17 +243,35 @@
       animation: fadeIn 0.3s ease;
     }
 
-    .tab-panel { display: none; }
-    .tab-panel.active { display: block; animation: slideUp 0.35s ease; }
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: slideUp 0.35s ease;
+    }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ═══════════════ CARDS ═══════════════ */
@@ -278,12 +310,35 @@
       flex-shrink: 0;
     }
 
-    .icon-primary { background: rgba(0,59,92,0.08); color: var(--primary); }
-    .icon-accent { background: var(--accent-glow); color: var(--accent); }
-    .icon-secondary { background: rgba(0,150,108,0.08); color: var(--secondary); }
-    .icon-warning { background: var(--warning-bg); color: var(--warning); }
-    .icon-danger { background: var(--danger-bg); color: var(--danger); }
-    .icon-success { background: var(--success-bg); color: var(--success); }
+    .icon-primary {
+      background: rgba(0, 59, 92, 0.08);
+      color: var(--primary);
+    }
+
+    .icon-accent {
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    .icon-secondary {
+      background: rgba(0, 150, 108, 0.08);
+      color: var(--secondary);
+    }
+
+    .icon-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .icon-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .icon-success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
 
     /* ═══════════════════════════════════════════════════════════
        TAB 1: PROJECT PROFILE
@@ -308,7 +363,7 @@
       right: -20%;
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, rgba(25,167,168,0.2) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(25, 167, 168, 0.2) 0%, transparent 60%);
       pointer-events: none;
     }
 
@@ -319,24 +374,27 @@
       left: -10%;
       width: 400px;
       height: 400px;
-      background: radial-gradient(circle, rgba(0,150,108,0.15) 0%, transparent 60%);
+      background: radial-gradient(circle, rgba(0, 150, 108, 0.15) 0%, transparent 60%);
       pointer-events: none;
     }
 
-    .hero-content { position: relative; z-index: 1; }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255,255,255,0.12);
+      background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(8px);
       padding: 6px 14px;
       border-radius: var(--radius-full);
       font-size: 0.75rem;
       font-weight: 500;
       margin-bottom: 1.25rem;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .hero h1 {
@@ -474,7 +532,7 @@
       justify-content: center;
       font-size: 1.25rem;
       margin-bottom: 0.75rem;
-      background: linear-gradient(135deg, var(--accent-glow), rgba(0,150,108,0.08));
+      background: linear-gradient(135deg, var(--accent-glow), rgba(0, 150, 108, 0.08));
     }
 
     .feature-name {
@@ -506,7 +564,9 @@
       transition: var(--transition);
     }
 
-    .tech-item:hover { border-color: var(--accent); }
+    .tech-item:hover {
+      border-color: var(--accent);
+    }
 
     .tech-label {
       font-size: 0.6875rem;
@@ -563,11 +623,25 @@
       color: var(--text-inverse);
     }
 
-    .avatar-1 { background: linear-gradient(135deg, var(--primary), var(--primary-light)); }
-    .avatar-2 { background: linear-gradient(135deg, var(--secondary), var(--secondary-light)); }
-    .avatar-3 { background: linear-gradient(135deg, var(--accent), var(--accent-light)); }
-    .avatar-4 { background: linear-gradient(135deg, #8B5CF6, #A78BFA); }
-    .avatar-5 { background: linear-gradient(135deg, #F59E0B, #FBBF24); }
+    .avatar-1 {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+
+    .avatar-2 {
+      background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
+    }
+
+    .avatar-3 {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    }
+
+    .avatar-4 {
+      background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+    }
+
+    .avatar-5 {
+      background: linear-gradient(135deg, #F59E0B, #FBBF24);
+    }
 
     .team-name {
       font-size: 0.9375rem;
@@ -615,7 +689,9 @@
       padding: 0 0 1.75rem;
     }
 
-    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
 
     .timeline-dot {
       position: absolute;
@@ -709,7 +785,9 @@
       transition: var(--transition);
     }
 
-    .summary-card:hover { box-shadow: var(--shadow-md); }
+    .summary-card:hover {
+      box-shadow: var(--shadow-md);
+    }
 
     .summary-value {
       font-size: 2rem;
@@ -727,9 +805,17 @@
       letter-spacing: 0.04em;
     }
 
-    .summary-card.accent .summary-value { color: var(--accent); }
-    .summary-card.success .summary-value { color: var(--success); }
-    .summary-card.warning .summary-value { color: var(--warning); }
+    .summary-card.accent .summary-value {
+      color: var(--accent);
+    }
+
+    .summary-card.success .summary-value {
+      color: var(--success);
+    }
+
+    .summary-card.warning .summary-value {
+      color: var(--warning);
+    }
 
     /* Filters */
     .filters {
@@ -776,7 +862,9 @@
       margin-top: 1.5rem;
     }
 
-    .phase-header:first-of-type { margin-top: 0; }
+    .phase-header:first-of-type {
+      margin-top: 0;
+    }
 
     .phase-name {
       font-size: 0.875rem;
@@ -896,9 +984,20 @@
       text-align: center;
     }
 
-    .status-todo { background: var(--bg-alt); color: var(--text-muted); }
-    .status-in-progress { background: rgba(25,167,168,0.1); color: var(--accent); }
-    .status-done { background: var(--success-bg); color: var(--success); }
+    .status-todo {
+      background: var(--bg-alt);
+      color: var(--text-muted);
+    }
+
+    .status-in-progress {
+      background: rgba(25, 167, 168, 0.1);
+      color: var(--accent);
+    }
+
+    .status-done {
+      background: var(--success-bg);
+      color: var(--success);
+    }
 
     .edit-btn {
       background: none;
@@ -945,9 +1044,20 @@
       font-weight: 600;
     }
 
-    .health-good { background: var(--success-bg); color: var(--success); }
-    .health-warning { background: var(--warning-bg); color: var(--warning); }
-    .health-danger { background: var(--danger-bg); color: var(--danger); }
+    .health-good {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .health-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .health-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
 
     .health-dot {
       width: 8px;
@@ -958,8 +1068,15 @@
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
     }
 
     /* KPI Grid */
@@ -981,7 +1098,9 @@
       transition: var(--transition);
     }
 
-    .kpi-card:hover { box-shadow: var(--shadow-md); }
+    .kpi-card:hover {
+      box-shadow: var(--shadow-md);
+    }
 
     .kpi-card::before {
       content: '';
@@ -992,10 +1111,21 @@
       height: 3px;
     }
 
-    .kpi-card:nth-child(1)::before { background: linear-gradient(90deg, var(--accent), var(--secondary)); }
-    .kpi-card:nth-child(2)::before { background: linear-gradient(90deg, var(--success), #34d399); }
-    .kpi-card:nth-child(3)::before { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
-    .kpi-card:nth-child(4)::before { background: linear-gradient(90deg, var(--warning), #fbbf24); }
+    .kpi-card:nth-child(1)::before {
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+    }
+
+    .kpi-card:nth-child(2)::before {
+      background: linear-gradient(90deg, var(--success), #34d399);
+    }
+
+    .kpi-card:nth-child(3)::before {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    }
+
+    .kpi-card:nth-child(4)::before {
+      background: linear-gradient(90deg, var(--warning), #fbbf24);
+    }
 
     .kpi-value {
       font-size: 2.25rem;
@@ -1196,7 +1326,9 @@
       border-bottom: 1px solid var(--border-light);
     }
 
-    .milestone-item:last-child { border-bottom: none; }
+    .milestone-item:last-child {
+      border-bottom: none;
+    }
 
     .milestone-status {
       width: 28px;
@@ -1225,7 +1357,9 @@
       color: var(--text-muted);
     }
 
-    .milestone-info { flex: 1; }
+    .milestone-info {
+      flex: 1;
+    }
 
     .milestone-name {
       font-size: 0.875rem;
@@ -1243,7 +1377,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.4);
+      background: rgba(0, 0, 0, 0.4);
       backdrop-filter: blur(4px);
       z-index: 1000;
       align-items: center;
@@ -1251,7 +1385,9 @@
       animation: fadeIn 0.2s ease;
     }
 
-    .modal-overlay.show { display: flex; }
+    .modal-overlay.show {
+      display: flex;
+    }
 
     .modal {
       background: var(--surface);
@@ -1287,7 +1423,10 @@
       transition: var(--transition);
     }
 
-    .modal-close:hover { background: var(--bg-alt); color: var(--text-primary); }
+    .modal-close:hover {
+      background: var(--bg-alt);
+      color: var(--text-primary);
+    }
 
     .form-group {
       margin-bottom: 1.25rem;
@@ -1303,7 +1442,8 @@
       letter-spacing: 0.04em;
     }
 
-    .form-select, .form-input {
+    .form-select,
+    .form-input {
       width: 100%;
       padding: 10px 14px;
       border: 1px solid var(--border);
@@ -1315,7 +1455,8 @@
       transition: var(--transition);
     }
 
-    .form-select:focus, .form-input:focus {
+    .form-select:focus,
+    .form-input:focus {
       outline: none;
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--accent-glow);
@@ -1327,33 +1468,73 @@
       margin-top: 1.5rem;
     }
 
-    .modal-actions .btn { flex: 1; justify-content: center; }
+    .modal-actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
 
     .btn-ghost {
       background: var(--bg-alt);
       color: var(--text-secondary);
     }
 
-    .btn-ghost:hover { background: var(--border); }
+    .btn-ghost:hover {
+      background: var(--border);
+    }
 
     /* ═══════════════ RESPONSIVE ═══════════════ */
     @media (max-width: 900px) {
-      .split-grid { grid-template-columns: 1fr; }
-      .charts-row { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .split-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .charts-row {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     @media (max-width: 640px) {
-      .hero { padding: 2rem 1.5rem; }
-      .hero h1 { font-size: 1.5rem; }
-      .hero-subtitle { font-size: 0.9375rem; }
-      .hero-stats { gap: 1.25rem; }
-      .hero-stat-value { font-size: 1.25rem; }
+      .hero {
+        padding: 2rem 1.5rem;
+      }
 
-      .tabs-nav { top: 56px; }
-      .tab-btn { padding: 12px 6px; font-size: 0.75rem; gap: 4px; }
-      .tab-icon { font-size: 0.9rem; }
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.9375rem;
+      }
+
+      .hero-stats {
+        gap: 1.25rem;
+      }
+
+      .hero-stat-value {
+        font-size: 1.25rem;
+      }
+
+      .tabs-nav {
+        top: 56px;
+      }
+
+      .tab-btn {
+        padding: 12px 6px;
+        font-size: 0.75rem;
+        gap: 4px;
+      }
+
+      .tab-icon {
+        font-size: 0.9rem;
+      }
 
       .task-row {
         grid-template-columns: 30px 1fr 70px 50px;
@@ -1362,584 +1543,635 @@
       }
 
       .task-row .assignee-badge,
-      .task-row .priority-badge { display: none; }
+      .task-row .priority-badge {
+        display: none;
+      }
 
-      .features-grid { grid-template-columns: 1fr; }
-      .team-grid { grid-template-columns: repeat(2, 1fr); }
-      .tech-grid { grid-template-columns: repeat(2, 1fr); }
-      .kpi-grid { grid-template-columns: 1fr 1fr; }
-      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
 
-      .container { padding: 0 1rem; }
-      .tab-content { padding: 1.25rem 0 3rem; }
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .container {
+        padding: 0 1rem;
+      }
+
+      .tab-content {
+        padding: 1.25rem 0 3rem;
+      }
     }
 
     @media (max-width: 380px) {
-      .summary-grid { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: 1fr; }
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<div class="page-wrapper">
-  <!-- ═══════════════ TOP HEADER ═══════════════ -->
-  <header class="top-header">
-    <div class="logo-group">
-      <div class="logo-icon">S</div>
-      <div class="logo-text">
-        Siraj <span class="arabic">سراج</span>
+  <div class="page-wrapper">
+    <!-- ═══════════════ TOP HEADER ═══════════════ -->
+    <header class="top-header">
+      <div class="logo-group">
+        <div class="logo-icon">S</div>
+        <div class="logo-text">
+          Siraj <span class="arabic">سراج</span>
+        </div>
       </div>
-    </div>
-    <a href="https://github.com/SaraAliSA/siraj" target="_blank" class="github-link">
-      <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-      GitHub
-    </a>
-  </header>
+      <a href="https://github.com/SaraAliSA/siraj" target="_blank" class="github-link">
+        <svg viewBox="0 0 16 16">
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+        </svg>
+        GitHub
+      </a>
+    </header>
 
-  <!-- ═══════════════ TABS NAVIGATION ═══════════════ -->
-  <nav class="tabs-nav" role="tablist">
-    <button class="tab-btn active" role="tab" data-tab="profile" onclick="switchTab('profile', this)">
-      <span class="tab-icon">📋</span> Project Profile
-    </button>
-    <button class="tab-btn" role="tab" data-tab="tasks" onclick="switchTab('tasks', this)">
-      <span class="tab-icon">📌</span> Planning & Tasks
-    </button>
-    <button class="tab-btn" role="tab" data-tab="dashboard" onclick="switchTab('dashboard', this)">
-      <span class="tab-icon">📊</span> Progress Dashboard
-    </button>
-  </nav>
+    <!-- ═══════════════ TABS NAVIGATION ═══════════════ -->
+    <nav class="tabs-nav" role="tablist">
+      <button class="tab-btn active" role="tab" data-tab="profile" onclick="switchTab('profile', this)">
+        <span class="tab-icon">📋</span> Project Profile
+      </button>
+      <button class="tab-btn" role="tab" data-tab="tasks" onclick="switchTab('tasks', this)">
+        <span class="tab-icon">📌</span> Planning & Tasks
+      </button>
+      <button class="tab-btn" role="tab" data-tab="dashboard" onclick="switchTab('dashboard', this)">
+        <span class="tab-icon">📊</span> Progress Dashboard
+      </button>
+    </nav>
 
-  <!-- ═══════════════════════════════════════════════════════════
+    <!-- ═══════════════════════════════════════════════════════════
        TAB 1: PROJECT PROFILE
        ═══════════════════════════════════════════════════════════ -->
-  <div class="tab-content">
-    <div id="profile" class="tab-panel active">
-      <div class="container">
+    <div class="tab-content">
+      <div id="profile" class="tab-panel active">
+        <div class="container">
 
-        <!-- Hero -->
-        <div class="hero">
-          <div class="hero-content">
-            <div class="hero-badge">🚀 AI-First FinTech · Hackathon Project</div>
-            <h1>Siraj — <span class="arabic-name">سراج</span></h1>
-            <p class="hero-subtitle">
-              An AI Financial App that transforms banking data into intelligent financial guidance.
-              Instead of showing balances and charts, Siraj analyzes behavior, predicts financial situations,
-              and provides proactive recommendations — like a trusted financial advisor, not a dashboard.
-            </p>
-            <div class="hero-stats">
-              <div class="hero-stat">
-                <div class="hero-stat-value">12</div>
-                <div class="hero-stat-label">AI Features</div>
-              </div>
-              <div class="hero-stat">
-                <div class="hero-stat-value">5</div>
-                <div class="hero-stat-label">Team Members</div>
-              </div>
-              <div class="hero-stat">
-                <div class="hero-stat-value">48h</div>
-                <div class="hero-stat-label">Build Time</div>
-              </div>
-              <div class="hero-stat">
-                <div class="hero-stat-value">🇸🇦</div>
-                <div class="hero-stat-label">Saudi Market</div>
+          <!-- Hero -->
+          <div class="hero">
+            <div class="hero-content">
+              <div class="hero-badge">🚀 AI-First FinTech · Hackathon Project</div>
+              <h1>Siraj — <span class="arabic-name">سراج</span></h1>
+              <p class="hero-subtitle">
+                An AI Financial App that transforms banking data into intelligent financial guidance.
+                Instead of showing balances and charts, Siraj analyzes behavior, predicts financial situations,
+                and provides proactive recommendations — like a trusted financial advisor, not a dashboard.
+              </p>
+              <div class="hero-stats">
+                <div class="hero-stat">
+                  <div class="hero-stat-value">12</div>
+                  <div class="hero-stat-label">AI Features</div>
+                </div>
+                <div class="hero-stat">
+                  <div class="hero-stat-value">5</div>
+                  <div class="hero-stat-label">Team Members</div>
+                </div>
+                <div class="hero-stat">
+                  <div class="hero-stat-value">48h</div>
+                  <div class="hero-stat-label">Build Time</div>
+                </div>
+                <div class="hero-stat">
+                  <div class="hero-stat-value">🇸🇦</div>
+                  <div class="hero-stat-label">Saudi Market</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Problem & Solution -->
-        <h3 class="section-heading">🎯 Problem & Solution</h3>
-        <div class="split-grid">
-          <div class="card problem-card">
+          <!-- Problem & Solution -->
+          <h3 class="section-heading">🎯 Problem & Solution</h3>
+          <div class="split-grid">
+            <div class="card problem-card">
+              <div class="card-title">
+                <div class="icon icon-danger">⚠️</div> The Problem
+              </div>
+              <ul class="card-list">
+                <li data-icon="❌">Users have banking data but don't understand their financial situation</li>
+                <li data-icon="❌">No insight into spending habits or patterns</li>
+                <li data-icon="❌">Unable to prepare for seasonal expenses (Ramadan, Eid, vacations)</li>
+                <li data-icon="❌">Can't detect unnecessary recurring subscriptions</li>
+                <li data-icon="❌">Current banking apps display data but rarely explain what users should do</li>
+                <li data-icon="❌">No culturally-aware financial guidance in Arabic</li>
+              </ul>
+            </div>
+            <div class="card solution-card">
+              <div class="card-title">
+                <div class="icon icon-success">✅</div> Our Solution
+              </div>
+              <ul class="card-list">
+                <li data-icon="🤖">AI continuously analyzes financial behavior and predicts outcomes</li>
+                <li data-icon="💡">Natural language explanations instead of just numbers and charts</li>
+                <li data-icon="📅">Proactive seasonal planning for Ramadan, Eid, and school season</li>
+                <li data-icon="🔔">Smart alerts with evidence-based explanations (the WHY)</li>
+                <li data-icon="🎯">AI Financial Coach that simulates outcomes before answering</li>
+                <li data-icon="🕌">Islamic finance principles and Saudi dialect Arabic</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- AI Features -->
+          <h3 class="section-heading">🤖 Core AI Features</h3>
+          <div class="features-grid">
+            <div class="feature-card">
+              <div class="feature-icon">📊</div>
+              <div class="feature-name">AI Financial Health Score</div>
+              <div class="feature-desc">Intelligent score with explanations of why it changed, positive/negative
+                behaviors, and predicted next month.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🌅</div>
+              <div class="feature-name">AI Financial Briefing</div>
+              <div class="feature-desc">Dashboard opens with an AI-written summary instead of charts. Personalized,
+                warm, and actionable.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">📈</div>
+              <div class="feature-name">AI Spending Analysis</div>
+              <div class="feature-desc">Analyzes categories, income, cash flow, and trends — explained in natural
+                language, not just numbers.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">💬</div>
+              <div class="feature-name">AI Financial Coach</div>
+              <div class="feature-desc">Ask questions like "Can I afford a new car?" — the AI simulates outcomes before
+                answering.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🔮</div>
+              <div class="feature-name">AI Scenario Simulator</div>
+              <div class="feature-desc">Simulate buying a car, salary changes, new loans, and see future cash flow and
+                budget impact.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">📅</div>
+              <div class="feature-name">AI Seasonal Planner</div>
+              <div class="feature-desc">Auto-prepare for Ramadan, Eid, summer vacation with predicted expenses and
+                savings plans.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🔔</div>
+              <div class="feature-name">AI Smart Alerts</div>
+              <div class="feature-desc">Proactive alerts like "You may exceed dining budget Thursday" — each alert
+                explains WHY.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">📑</div>
+              <div class="feature-name">AI Subscription Manager</div>
+              <div class="feature-desc">Auto-detects recurring subscriptions, projects 12/24-month costs, and suggests
+                evidence-based reviews.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">🧠</div>
+              <div class="feature-name">AI Habit Detection</div>
+              <div class="feature-desc">Detects weekend overspending, coffee habits, delivery dependency, and recommends
+                improvements.</div>
+            </div>
+            <div class="feature-card">
+              <div class="feature-icon">📝</div>
+              <div class="feature-name">AI Monthly Review</div>
+              <div class="feature-desc">Personalized monthly report with achievements, risks, improvements, and
+                predictions in natural language.</div>
+            </div>
+          </div>
+
+          <!-- Target Market -->
+          <h3 class="section-heading">🇸🇦 Target Market</h3>
+          <div class="card">
             <div class="card-title">
-              <div class="icon icon-danger">⚠️</div> The Problem
+              <div class="icon icon-secondary">🎯</div> Saudi Arabia — Islamic Finance Alignment
             </div>
             <ul class="card-list">
-              <li data-icon="❌">Users have banking data but don't understand their financial situation</li>
-              <li data-icon="❌">No insight into spending habits or patterns</li>
-              <li data-icon="❌">Unable to prepare for seasonal expenses (Ramadan, Eid, vacations)</li>
-              <li data-icon="❌">Can't detect unnecessary recurring subscriptions</li>
-              <li data-icon="❌">Current banking apps display data but rarely explain what users should do</li>
-              <li data-icon="❌">No culturally-aware financial guidance in Arabic</li>
+              <li data-icon="🕌">Respects Islamic finance principles — avoids riba (interest), budgets for Zakat</li>
+              <li data-icon="🗣️">Warm Saudi dialect Arabic — conversational, not robotic</li>
+              <li data-icon="🎉">Cultural awareness — Ramadan spending, Eid preparations, wedding planning</li>
+              <li data-icon="💰">Understands Saudi lifestyle — car costs, electricity bills, delivery culture</li>
+              <li data-icon="👨‍👩‍👧‍👦">Family-centric — supports joint finances and family obligations</li>
             </ul>
           </div>
-          <div class="card solution-card">
-            <div class="card-title">
-              <div class="icon icon-success">✅</div> Our Solution
-            </div>
-            <ul class="card-list">
-              <li data-icon="🤖">AI continuously analyzes financial behavior and predicts outcomes</li>
-              <li data-icon="💡">Natural language explanations instead of just numbers and charts</li>
-              <li data-icon="📅">Proactive seasonal planning for Ramadan, Eid, and school season</li>
-              <li data-icon="🔔">Smart alerts with evidence-based explanations (the WHY)</li>
-              <li data-icon="🎯">AI Financial Coach that simulates outcomes before answering</li>
-              <li data-icon="🕌">Islamic finance principles and Saudi dialect Arabic</li>
-            </ul>
-          </div>
-        </div>
 
-        <!-- AI Features -->
-        <h3 class="section-heading">🤖 Core AI Features</h3>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">📊</div>
-            <div class="feature-name">AI Financial Health Score</div>
-            <div class="feature-desc">Intelligent score with explanations of why it changed, positive/negative behaviors, and predicted next month.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🌅</div>
-            <div class="feature-name">AI Financial Briefing</div>
-            <div class="feature-desc">Dashboard opens with an AI-written summary instead of charts. Personalized, warm, and actionable.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">📈</div>
-            <div class="feature-name">AI Spending Analysis</div>
-            <div class="feature-desc">Analyzes categories, income, cash flow, and trends — explained in natural language, not just numbers.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">💬</div>
-            <div class="feature-name">AI Financial Coach</div>
-            <div class="feature-desc">Ask questions like "Can I afford a new car?" — the AI simulates outcomes before answering.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🔮</div>
-            <div class="feature-name">AI Scenario Simulator</div>
-            <div class="feature-desc">Simulate buying a car, salary changes, new loans, and see future cash flow and budget impact.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">📅</div>
-            <div class="feature-name">AI Seasonal Planner</div>
-            <div class="feature-desc">Auto-prepare for Ramadan, Eid, summer vacation with predicted expenses and savings plans.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🔔</div>
-            <div class="feature-name">AI Smart Alerts</div>
-            <div class="feature-desc">Proactive alerts like "You may exceed dining budget Thursday" — each alert explains WHY.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">📑</div>
-            <div class="feature-name">AI Subscription Manager</div>
-            <div class="feature-desc">Auto-detects recurring subscriptions, projects 12/24-month costs, and suggests evidence-based reviews.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">🧠</div>
-            <div class="feature-name">AI Habit Detection</div>
-            <div class="feature-desc">Detects weekend overspending, coffee habits, delivery dependency, and recommends improvements.</div>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon">📝</div>
-            <div class="feature-name">AI Monthly Review</div>
-            <div class="feature-desc">Personalized monthly report with achievements, risks, improvements, and predictions in natural language.</div>
-          </div>
-        </div>
-
-        <!-- Target Market -->
-        <h3 class="section-heading">🇸🇦 Target Market</h3>
-        <div class="card">
-          <div class="card-title">
-            <div class="icon icon-secondary">🎯</div> Saudi Arabia — Islamic Finance Alignment
-          </div>
-          <ul class="card-list">
-            <li data-icon="🕌">Respects Islamic finance principles — avoids riba (interest), budgets for Zakat</li>
-            <li data-icon="🗣️">Warm Saudi dialect Arabic — conversational, not robotic</li>
-            <li data-icon="🎉">Cultural awareness — Ramadan spending, Eid preparations, wedding planning</li>
-            <li data-icon="💰">Understands Saudi lifestyle — car costs, electricity bills, delivery culture</li>
-            <li data-icon="👨‍👩‍👧‍👦">Family-centric — supports joint finances and family obligations</li>
-          </ul>
-        </div>
-
-        <!-- Tech Stack -->
-        <h3 class="section-heading">⚙️ Technology Stack</h3>
-        <div class="tech-grid">
-          <div class="tech-item">
-            <div class="tech-label">Frontend</div>
-            <div class="tech-value">React</div>
-            <div class="tech-sub">Tailwind CSS · Vercel</div>
-          </div>
-          <div class="tech-item">
-            <div class="tech-label">Backend</div>
-            <div class="tech-value">FastAPI</div>
-            <div class="tech-sub">SQLAlchemy · Python</div>
-          </div>
-          <div class="tech-item">
-            <div class="tech-label">AI Engine</div>
-            <div class="tech-value">Claude API</div>
-            <div class="tech-sub">Anthropic · LLM</div>
-          </div>
-          <div class="tech-item">
-            <div class="tech-label">Database</div>
-            <div class="tech-value">SQLite</div>
-            <div class="tech-sub">Zero-setup · Fast</div>
-          </div>
-          <div class="tech-item">
-            <div class="tech-label">Hosting</div>
-            <div class="tech-value">Vercel + Render</div>
-            <div class="tech-sub">Frontend + Backend</div>
-          </div>
-        </div>
-
-        <!-- Team -->
-        <h3 class="section-heading">👥 Team</h3>
-        <div class="team-grid">
-          <div class="team-card">
-            <div class="team-avatar avatar-1">TL</div>
-            <div class="team-name">Tech Lead</div>
-            <div class="team-role">Backend & Database</div>
-            <div class="team-focus">FastAPI · SQLAlchemy</div>
-          </div>
-          <div class="team-card">
-            <div class="team-avatar avatar-2">FL</div>
-            <div class="team-name">Frontend Lead</div>
-            <div class="team-role">React & UI</div>
-            <div class="team-focus">React · Tailwind</div>
-          </div>
-          <div class="team-card">
-            <div class="team-avatar avatar-3">AI</div>
-            <div class="team-name">AI/ML Engineer</div>
-            <div class="team-role">LLM Integration</div>
-            <div class="team-focus">Claude · Prompts</div>
-          </div>
-          <div class="team-card">
-            <div class="team-avatar avatar-4">PD</div>
-            <div class="team-name">Product/Design</div>
-            <div class="team-role">UX & Demo</div>
-            <div class="team-focus">Figma · Pitch</div>
-          </div>
-          <div class="team-card">
-            <div class="team-avatar avatar-5">DO</div>
-            <div class="team-name">DevOps</div>
-            <div class="team-role">Deployment & Testing</div>
-            <div class="team-focus">CI/CD · QA</div>
-          </div>
-        </div>
-
-        <!-- Timeline -->
-        <h3 class="section-heading">🗓️ Project Phases</h3>
-        <div class="card">
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-phase">Phase 1</div>
-              <div class="timeline-title">PRD & Product Strategy</div>
-              <div class="timeline-desc">Executive summary, product vision, goals, problem statement, user personas, competitive analysis, and MVP scope.</div>
+          <!-- Tech Stack -->
+          <h3 class="section-heading">⚙️ Technology Stack</h3>
+          <div class="tech-grid">
+            <div class="tech-item">
+              <div class="tech-label">Frontend</div>
+              <div class="tech-value">React</div>
+              <div class="tech-sub">Tailwind CSS · Vercel</div>
             </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-phase">Phase 2</div>
-              <div class="timeline-title">Information Architecture & User Flows</div>
-              <div class="timeline-desc">User journey maps, screen inventory, low-fidelity wireframes, and complete navigation structure.</div>
+            <div class="tech-item">
+              <div class="tech-label">Backend</div>
+              <div class="tech-value">FastAPI</div>
+              <div class="tech-sub">SQLAlchemy · Python</div>
             </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-phase">Phase 3</div>
-              <div class="timeline-title">Design System & UI Concepts</div>
-              <div class="timeline-desc">Alinma Premium design system, component library, high-fidelity specifications, and three complete UI concepts.</div>
+            <div class="tech-item">
+              <div class="tech-label">AI Engine</div>
+              <div class="tech-value">Claude API</div>
+              <div class="tech-sub">Anthropic · LLM</div>
             </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-phase">Phase 4</div>
-              <div class="timeline-title">Technical Architecture</div>
-              <div class="timeline-desc">Database schema, API requirements, AI prompt engineering, LLM system prompts, decision trees, and security requirements.</div>
+            <div class="tech-item">
+              <div class="tech-label">Database</div>
+              <div class="tech-value">SQLite</div>
+              <div class="tech-sub">Zero-setup · Fast</div>
             </div>
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-phase">Phase 5</div>
-              <div class="timeline-title">Demo Script & Pitch</div>
-              <div class="timeline-desc">3-5 minute demo script, hackathon pitch highlights, judging strategy, and submission preparation.</div>
+            <div class="tech-item">
+              <div class="tech-label">Hosting</div>
+              <div class="tech-value">Vercel + Render</div>
+              <div class="tech-sub">Frontend + Backend</div>
             </div>
           </div>
-        </div>
 
+          <!-- Team -->
+          <h3 class="section-heading">👥 Team</h3>
+          <div class="team-grid">
+            <div class="team-card">
+              <div class="team-avatar avatar-1">TL</div>
+              <div class="team-name">Tech Lead</div>
+              <div class="team-role">Backend & Database</div>
+              <div class="team-focus">FastAPI · SQLAlchemy</div>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar avatar-2">FL</div>
+              <div class="team-name">Frontend Lead</div>
+              <div class="team-role">React & UI</div>
+              <div class="team-focus">React · Tailwind</div>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar avatar-3">AI</div>
+              <div class="team-name">AI/ML Engineer</div>
+              <div class="team-role">LLM Integration</div>
+              <div class="team-focus">Claude · Prompts</div>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar avatar-4">PD</div>
+              <div class="team-name">Product/Design</div>
+              <div class="team-role">UX & Demo</div>
+              <div class="team-focus">Figma · Pitch</div>
+            </div>
+            <div class="team-card">
+              <div class="team-avatar avatar-5">DO</div>
+              <div class="team-name">DevOps</div>
+              <div class="team-role">Deployment & Testing</div>
+              <div class="team-focus">CI/CD · QA</div>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <h3 class="section-heading">🗓️ Project Phases</h3>
+          <div class="card">
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-phase">Phase 1</div>
+                <div class="timeline-title">PRD & Product Strategy</div>
+                <div class="timeline-desc">Executive summary, product vision, goals, problem statement, user personas,
+                  competitive analysis, and MVP scope.</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-phase">Phase 2</div>
+                <div class="timeline-title">Information Architecture & User Flows</div>
+                <div class="timeline-desc">User journey maps, screen inventory, low-fidelity wireframes, and complete
+                  navigation structure.</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-phase">Phase 3</div>
+                <div class="timeline-title">Design System & UI Concepts</div>
+                <div class="timeline-desc">Alinma Premium design system, component library, high-fidelity
+                  specifications, and three complete UI concepts.</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-phase">Phase 4</div>
+                <div class="timeline-title">Technical Architecture</div>
+                <div class="timeline-desc">Database schema, API requirements, AI prompt engineering, LLM system prompts,
+                  decision trees, and security requirements.</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-phase">Phase 5</div>
+                <div class="timeline-title">Demo Script & Pitch</div>
+                <div class="timeline-desc">3-5 minute demo script, hackathon pitch highlights, judging strategy, and
+                  submission preparation.</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
 
-    <!-- ═══════════════════════════════════════════════════════════
+      <!-- ═══════════════════════════════════════════════════════════
          TAB 2: PLANNING & TASK MANAGEMENT
          ═══════════════════════════════════════════════════════════ -->
-    <div id="tasks" class="tab-panel">
-      <div class="container">
+      <div id="tasks" class="tab-panel">
+        <div class="container">
 
-        <div class="task-header">
-          <h2>Planning & Task Management</h2>
-          <button class="btn btn-primary" onclick="openAddModal()">
-            + Add Task
-          </button>
-        </div>
+          <div class="task-header">
+            <h2>Planning & Task Management</h2>
+            <button class="btn btn-primary" onclick="openAddModal()">
+              + Add Task
+            </button>
+          </div>
 
-        <!-- Summary -->
-        <div class="summary-grid">
-          <div class="summary-card">
-            <div class="summary-value" id="totalTasks">0</div>
-            <div class="summary-label">Total Tasks</div>
-          </div>
-          <div class="summary-card success">
-            <div class="summary-value" id="completedTasks">0</div>
-            <div class="summary-label">Completed</div>
-          </div>
-          <div class="summary-card accent">
-            <div class="summary-value" id="inProgressTasks">0</div>
-            <div class="summary-label">In Progress</div>
-          </div>
-          <div class="summary-card warning">
-            <div class="summary-value" id="unassignedTasks">0</div>
-            <div class="summary-label">Unassigned</div>
-          </div>
-        </div>
-
-        <!-- Filters -->
-        <div class="filters">
-          <button class="filter-btn active" onclick="filterTasks('all', this)">All</button>
-          <button class="filter-btn" onclick="filterTasks('todo', this)">To Do</button>
-          <button class="filter-btn" onclick="filterTasks('in-progress', this)">In Progress</button>
-          <button class="filter-btn" onclick="filterTasks('done', this)">Done</button>
-          <button class="filter-btn" onclick="filterTasks('high', this)">🔴 High Priority</button>
-          <button class="filter-btn" onclick="filterTasks('unassigned', this)">Unassigned</button>
-        </div>
-
-        <!-- Task List Container -->
-        <div id="tasksContainer"></div>
-
-      </div>
-    </div>
-
-    <!-- ═══════════════════════════════════════════════════════════
-         TAB 3: PROGRESS DASHBOARD
-         ═══════════════════════════════════════════════════════════ -->
-    <div id="dashboard" class="tab-panel">
-      <div class="container">
-
-        <div class="dashboard-header">
-          <h2>Progress Dashboard</h2>
-          <div id="healthIndicator" class="health-indicator health-warning">
-            <span class="health-dot"></span>
-            <span id="healthText">In Progress</span>
-          </div>
-        </div>
-
-        <!-- KPIs -->
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="kpi-value" id="kpiCompletion">0%</div>
-            <div class="kpi-label">Completion Rate</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-value" id="kpiOnTrack">0/0</div>
-            <div class="kpi-label">Tasks Complete</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-value" id="kpiPhases">0/5</div>
-            <div class="kpi-label">Phases Done</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-value" id="kpiVelocity">0</div>
-            <div class="kpi-label">Tasks / Phase</div>
-          </div>
-        </div>
-
-        <!-- Charts -->
-        <div class="charts-row">
-          <!-- Donut Chart -->
-          <div class="chart-card">
-            <div class="chart-title">Task Status Distribution</div>
-            <div id="donutChart" class="donut-chart"></div>
-            <div class="chart-legend">
-              <div class="legend-item"><div class="legend-dot" style="background:#16A34A"></div> Done</div>
-              <div class="legend-item"><div class="legend-dot" style="background:#19A7A8"></div> In Progress</div>
-              <div class="legend-item"><div class="legend-dot" style="background:#E2E8F0"></div> To Do</div>
+          <!-- Summary -->
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="summary-value" id="totalTasks">0</div>
+              <div class="summary-label">Total Tasks</div>
+            </div>
+            <div class="summary-card success">
+              <div class="summary-value" id="completedTasks">0</div>
+              <div class="summary-label">Completed</div>
+            </div>
+            <div class="summary-card accent">
+              <div class="summary-value" id="inProgressTasks">0</div>
+              <div class="summary-label">In Progress</div>
+            </div>
+            <div class="summary-card warning">
+              <div class="summary-value" id="unassignedTasks">0</div>
+              <div class="summary-label">Unassigned</div>
             </div>
           </div>
 
-          <!-- Bar Chart: Priority Distribution -->
-          <div class="chart-card">
-            <div class="chart-title">Priority Distribution</div>
-            <div id="priorityChart" class="bar-chart"></div>
+          <!-- Filters -->
+          <div class="filters">
+            <button class="filter-btn active" onclick="filterTasks('all', this)">All</button>
+            <button class="filter-btn" onclick="filterTasks('todo', this)">To Do</button>
+            <button class="filter-btn" onclick="filterTasks('in-progress', this)">In Progress</button>
+            <button class="filter-btn" onclick="filterTasks('done', this)">Done</button>
+            <button class="filter-btn" onclick="filterTasks('high', this)">🔴 High Priority</button>
+            <button class="filter-btn" onclick="filterTasks('unassigned', this)">Unassigned</button>
           </div>
+
+          <!-- Task List Container -->
+          <div id="tasksContainer"></div>
+
         </div>
+      </div>
 
-        <!-- Phase Progress -->
-        <h3 class="section-heading">📋 Phase Progress</h3>
-        <div id="phaseProgress" class="phase-progress-list"></div>
+      <!-- ═══════════════════════════════════════════════════════════
+         TAB 3: PROGRESS DASHBOARD
+         ═══════════════════════════════════════════════════════════ -->
+      <div id="dashboard" class="tab-panel">
+        <div class="container">
 
-        <!-- Milestones -->
-        <h3 class="section-heading" style="margin-top: 2.5rem;">🏆 Milestones</h3>
-        <div class="card">
-          <div id="milestoneList" class="milestone-list"></div>
+          <div class="dashboard-header">
+            <h2>Progress Dashboard</h2>
+            <div id="healthIndicator" class="health-indicator health-warning">
+              <span class="health-dot"></span>
+              <span id="healthText">In Progress</span>
+            </div>
+          </div>
+
+          <!-- KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-value" id="kpiCompletion">0%</div>
+              <div class="kpi-label">Completion Rate</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" id="kpiOnTrack">0/0</div>
+              <div class="kpi-label">Tasks Complete</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" id="kpiPhases">0/5</div>
+              <div class="kpi-label">Phases Done</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" id="kpiVelocity">0</div>
+              <div class="kpi-label">Tasks / Phase</div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="charts-row">
+            <!-- Donut Chart -->
+            <div class="chart-card">
+              <div class="chart-title">Task Status Distribution</div>
+              <div id="donutChart" class="donut-chart"></div>
+              <div class="chart-legend">
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#16A34A"></div> Done
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#19A7A8"></div> In Progress
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#E2E8F0"></div> To Do
+                </div>
+              </div>
+            </div>
+
+            <!-- Bar Chart: Priority Distribution -->
+            <div class="chart-card">
+              <div class="chart-title">Priority Distribution</div>
+              <div id="priorityChart" class="bar-chart"></div>
+            </div>
+          </div>
+
+          <!-- Phase Progress -->
+          <h3 class="section-heading">📋 Phase Progress</h3>
+          <div id="phaseProgress" class="phase-progress-list"></div>
+
+          <!-- Milestones -->
+          <h3 class="section-heading" style="margin-top: 2.5rem;">🏆 Milestones</h3>
+          <div class="card">
+            <div id="milestoneList" class="milestone-list"></div>
+          </div>
+
         </div>
-
       </div>
     </div>
   </div>
-</div>
 
-<!-- ═══════════════ EDIT TASK MODAL ═══════════════ -->
-<div id="editModal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title" id="modalTitle">Edit Task</div>
-      <button class="modal-close" onclick="closeModal()">&times;</button>
-    </div>
-    <div id="modalBody">
-      <div class="form-group">
-        <label class="form-label">Task Name</label>
-        <input type="text" class="form-input" id="modalTaskName" placeholder="Task name...">
+  <!-- ═══════════════ EDIT TASK MODAL ═══════════════ -->
+  <div id="editModal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Edit Task</div>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">Assignee</label>
-        <select class="form-select" id="modalAssignee">
-          <option value="">Unassigned</option>
-          <option>Tech Lead</option>
-          <option>Frontend Lead</option>
-          <option>AI/ML Engineer</option>
-          <option>Product/Design</option>
-          <option>DevOps</option>
-        </select>
+      <div id="modalBody">
+        <div class="form-group">
+          <label class="form-label">Task Name</label>
+          <input type="text" class="form-input" id="modalTaskName" placeholder="Task name...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Assignee</label>
+          <select class="form-select" id="modalAssignee">
+            <option value="">Unassigned</option>
+            <option>Tech Lead</option>
+            <option>Frontend Lead</option>
+            <option>AI/ML Engineer</option>
+            <option>Product/Design</option>
+            <option>DevOps</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="modalStatus">
+            <option value="todo">To Do</option>
+            <option value="in-progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select class="form-select" id="modalPriority">
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Status</label>
-        <select class="form-select" id="modalStatus">
-          <option value="todo">To Do</option>
-          <option value="in-progress">In Progress</option>
-          <option value="done">Done</option>
-        </select>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveModal()">Save</button>
       </div>
-      <div class="form-group">
-        <label class="form-label">Priority</label>
-        <select class="form-select" id="modalPriority">
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveModal()">Save</button>
     </div>
   </div>
-</div>
 
-<!-- ═══════════════════════════════════════════════════════════
+  <!-- ═══════════════════════════════════════════════════════════
      JAVASCRIPT
      ═══════════════════════════════════════════════════════════ -->
-<script>
-// ═══════════════ DEFAULT TASKS DATA ═══════════════
-const DEFAULT_TASKS = [
-  // Phase 1: PRD & Product Strategy
-  { phase: "Phase 1: PRD & Product Strategy", name: "Executive Summary & Product Vision", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 1: PRD & Product Strategy", name: "Problem Statement & Market Analysis", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 1: PRD & Product Strategy", name: "User Personas & Pain Points", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 1: PRD & Product Strategy", name: "Competitive Analysis", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 1: PRD & Product Strategy", name: "MVP Scope Definition", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 1: PRD & Product Strategy", name: "Product Goals & Success Metrics", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 1: PRD & Product Strategy", name: "Future Roadmap", priority: "low", status: "todo", assignee: "" },
+  <script>
+    // ═══════════════ DEFAULT TASKS DATA ═══════════════
+    const DEFAULT_TASKS = [
+      // Phase 1: PRD & Product Strategy
+      { phase: "Phase 1: PRD & Product Strategy", name: "Executive Summary & Product Vision", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 1: PRD & Product Strategy", name: "Problem Statement & Market Analysis", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 1: PRD & Product Strategy", name: "User Personas & Pain Points", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 1: PRD & Product Strategy", name: "Competitive Analysis", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 1: PRD & Product Strategy", name: "MVP Scope Definition", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 1: PRD & Product Strategy", name: "Product Goals & Success Metrics", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 1: PRD & Product Strategy", name: "Future Roadmap", priority: "low", status: "todo", assignee: "" },
 
-  // Phase 2: IA & User Flows
-  { phase: "Phase 2: Information Architecture", name: "User Journey Maps", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 2: Information Architecture", name: "Complete Screen Inventory", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 2: Information Architecture", name: "Navigation Structure & Sitemap", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 2: Information Architecture", name: "Low-Fidelity Wireframes", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 2: Information Architecture", name: "AI Interaction Flow Design", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 2: Information Architecture", name: "Edge Cases & Error States", priority: "medium", status: "todo", assignee: "" },
+      // Phase 2: IA & User Flows
+      { phase: "Phase 2: Information Architecture", name: "User Journey Maps", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 2: Information Architecture", name: "Complete Screen Inventory", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 2: Information Architecture", name: "Navigation Structure & Sitemap", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 2: Information Architecture", name: "Low-Fidelity Wireframes", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 2: Information Architecture", name: "AI Interaction Flow Design", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 2: Information Architecture", name: "Edge Cases & Error States", priority: "medium", status: "todo", assignee: "" },
 
-  // Phase 3: Design System & UI
-  { phase: "Phase 3: Design System & UI", name: "Alinma Premium Design System", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 3: Design System & UI", name: "Component Library", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 3: Design System & UI", name: "High-Fidelity UI Specifications", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 3: Design System & UI", name: "UI Concept 1: Premium Banking", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 3: Design System & UI", name: "UI Concept 2: AI-Forward", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 3: Design System & UI", name: "UI Concept 3: Minimalist Islamic", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 3: Design System & UI", name: "Accessibility & Responsive Review", priority: "medium", status: "todo", assignee: "" },
+      // Phase 3: Design System & UI
+      { phase: "Phase 3: Design System & UI", name: "Alinma Premium Design System", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 3: Design System & UI", name: "Component Library", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 3: Design System & UI", name: "High-Fidelity UI Specifications", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 3: Design System & UI", name: "UI Concept 1: Premium Banking", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 3: Design System & UI", name: "UI Concept 2: AI-Forward", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 3: Design System & UI", name: "UI Concept 3: Minimalist Islamic", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 3: Design System & UI", name: "Accessibility & Responsive Review", priority: "medium", status: "todo", assignee: "" },
 
-  // Phase 4: Technical Architecture
-  { phase: "Phase 4: Technical Architecture", name: "Database Schema Design", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "API Endpoints Specification", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "AI Feature Specifications", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "LLM System Prompts", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "AI Prompt Engineering Strategy", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "AI Decision Trees", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "Security & Non-Functional Requirements", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "Backend Setup (FastAPI + SQLite)", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "Frontend Setup (React + Tailwind)", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 4: Technical Architecture", name: "AI Integration (Claude API)", priority: "high", status: "todo", assignee: "" },
+      // Phase 4: Technical Architecture
+      { phase: "Phase 4: Technical Architecture", name: "Database Schema Design", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "API Endpoints Specification", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "AI Feature Specifications", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "LLM System Prompts", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "AI Prompt Engineering Strategy", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "AI Decision Trees", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "Security & Non-Functional Requirements", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "Backend Setup (FastAPI + SQLite)", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "Frontend Setup (React + Tailwind)", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 4: Technical Architecture", name: "AI Integration (Claude API)", priority: "high", status: "todo", assignee: "" },
 
-  // Phase 5: Demo & Pitch
-  { phase: "Phase 5: Demo Script & Pitch", name: "Demo Script (3-5 minutes)", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 5: Demo Script & Pitch", name: "Hackathon Pitch Highlights", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 5: Demo Script & Pitch", name: "Record Backup Demo Video", priority: "medium", status: "todo", assignee: "" },
-  { phase: "Phase 5: Demo Script & Pitch", name: "Final Integration Test", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 5: Demo Script & Pitch", name: "Deploy to Production", priority: "high", status: "todo", assignee: "" },
-  { phase: "Phase 5: Demo Script & Pitch", name: "Submission Package", priority: "high", status: "todo", assignee: "" },
-];
+      // Phase 5: Demo & Pitch
+      { phase: "Phase 5: Demo Script & Pitch", name: "Demo Script (3-5 minutes)", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 5: Demo Script & Pitch", name: "Hackathon Pitch Highlights", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 5: Demo Script & Pitch", name: "Record Backup Demo Video", priority: "medium", status: "todo", assignee: "" },
+      { phase: "Phase 5: Demo Script & Pitch", name: "Final Integration Test", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 5: Demo Script & Pitch", name: "Deploy to Production", priority: "high", status: "todo", assignee: "" },
+      { phase: "Phase 5: Demo Script & Pitch", name: "Submission Package", priority: "high", status: "todo", assignee: "" },
+    ];
 
-// ═══════════════ STATE ═══════════════
-let tasks = [];
-let currentFilter = 'all';
-let editingIndex = null;
-let isAddMode = false;
+    // ═══════════════ STATE ═══════════════
+    let tasks = [];
+    let currentFilter = 'all';
+    let editingIndex = null;
+    let isAddMode = false;
 
-// ═══════════════ PERSISTENCE ═══════════════
-function loadTasks() {
-  const saved = localStorage.getItem('siraj-tasks');
-  if (saved) {
-    try { tasks = JSON.parse(saved); } catch (e) { tasks = [...DEFAULT_TASKS]; }
-  } else {
-    tasks = [...DEFAULT_TASKS];
-  }
-}
+    // ═══════════════ PERSISTENCE ═══════════════
+    function loadTasks() {
+      const saved = localStorage.getItem('siraj-tasks');
+      if (saved) {
+        try { tasks = JSON.parse(saved); } catch (e) { tasks = [...DEFAULT_TASKS]; }
+      } else {
+        tasks = [...DEFAULT_TASKS];
+      }
+    }
 
-function saveTasks() {
-  localStorage.setItem('siraj-tasks', JSON.stringify(tasks));
-}
+    function saveTasks() {
+      localStorage.setItem('siraj-tasks', JSON.stringify(tasks));
+    }
 
-// ═══════════════ TAB SWITCHING ═══════════════
-function switchTab(tabId, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  btn.classList.add('active');
+    // ═══════════════ TAB SWITCHING ═══════════════
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
 
-  if (tabId === 'dashboard') updateDashboard();
-  if (tabId === 'tasks') renderTasks();
-}
+      if (tabId === 'dashboard') updateDashboard();
+      if (tabId === 'tasks') renderTasks();
+    }
 
-// ═══════════════ TASK RENDERING ═══════════════
-function getFilteredTasks() {
-  return tasks.map((t, i) => ({ ...t, _idx: i })).filter(t => {
-    if (currentFilter === 'all') return true;
-    if (currentFilter === 'todo') return t.status === 'todo';
-    if (currentFilter === 'in-progress') return t.status === 'in-progress';
-    if (currentFilter === 'done') return t.status === 'done';
-    if (currentFilter === 'high') return t.priority === 'high';
-    if (currentFilter === 'unassigned') return !t.assignee;
-    return true;
-  });
-}
+    // ═══════════════ TASK RENDERING ═══════════════
+    function getFilteredTasks() {
+      return tasks.map((t, i) => ({ ...t, _idx: i })).filter(t => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'todo') return t.status === 'todo';
+        if (currentFilter === 'in-progress') return t.status === 'in-progress';
+        if (currentFilter === 'done') return t.status === 'done';
+        if (currentFilter === 'high') return t.priority === 'high';
+        if (currentFilter === 'unassigned') return !t.assignee;
+        return true;
+      });
+    }
 
-function renderTasks() {
-  const filtered = getFilteredTasks();
-  const grouped = {};
-  filtered.forEach(t => {
-    if (!grouped[t.phase]) grouped[t.phase] = [];
-    grouped[t.phase].push(t);
-  });
+    function renderTasks() {
+      const filtered = getFilteredTasks();
+      const grouped = {};
+      filtered.forEach(t => {
+        if (!grouped[t.phase]) grouped[t.phase] = [];
+        grouped[t.phase].push(t);
+      });
 
-  let html = '';
-  const phases = [...new Set(tasks.map(t => t.phase))];
+      let html = '';
+      const phases = [...new Set(tasks.map(t => t.phase))];
 
-  phases.forEach(phase => {
-    const phaseTasks = grouped[phase];
-    if (!phaseTasks || phaseTasks.length === 0) return;
+      phases.forEach(phase => {
+        const phaseTasks = grouped[phase];
+        if (!phaseTasks || phaseTasks.length === 0) return;
 
-    const doneCount = phaseTasks.filter(t => t.status === 'done').length;
-    html += `<div class="phase-header">
+        const doneCount = phaseTasks.filter(t => t.status === 'done').length;
+        html += `<div class="phase-header">
       <span class="phase-name">${phase}</span>
       <span class="phase-count">${doneCount}/${phaseTasks.length}</span>
     </div>`;
 
-    phaseTasks.forEach(t => {
-      const statusLabel = t.status === 'todo' ? 'To Do' : t.status === 'in-progress' ? 'In Progress' : 'Done';
-      html += `<div class="task-row">
+        phaseTasks.forEach(t => {
+          const statusLabel = t.status === 'todo' ? 'To Do' : t.status === 'in-progress' ? 'In Progress' : 'Done';
+          html += `<div class="task-row">
         <input type="checkbox" class="task-checkbox" ${t.status === 'done' ? 'checked' : ''} onchange="toggleTask(${t._idx})">
         <div>
           <div class="task-name ${t.status === 'done' ? 'done' : ''}">${t.name}</div>
@@ -1949,210 +2181,211 @@ function renderTasks() {
         <span class="status-badge status-${t.status}">${statusLabel}</span>
         <button class="edit-btn" onclick="openEditModal(${t._idx})">✏️</button>
       </div>`;
-    });
-  });
+        });
+      });
 
-  if (filtered.length === 0) {
-    html = `<div style="text-align:center; padding:3rem; color:var(--text-muted);">
+      if (filtered.length === 0) {
+        html = `<div style="text-align:center; padding:3rem; color:var(--text-muted);">
       <div style="font-size:2rem; margin-bottom:0.5rem;">📋</div>
       No tasks match the current filter.
     </div>`;
-  }
+      }
 
-  document.getElementById('tasksContainer').innerHTML = html;
-  updateSummary();
-}
+      document.getElementById('tasksContainer').innerHTML = html;
+      updateSummary();
+    }
 
-function toggleTask(idx) {
-  tasks[idx].status = tasks[idx].status === 'done' ? 'todo' : 'done';
-  saveTasks();
-  renderTasks();
-}
+    function toggleTask(idx) {
+      tasks[idx].status = tasks[idx].status === 'done' ? 'todo' : 'done';
+      saveTasks();
+      renderTasks();
+    }
 
-function filterTasks(filter, btn) {
-  currentFilter = filter;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderTasks();
-}
+    function filterTasks(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTasks();
+    }
 
-function updateSummary() {
-  const total = tasks.length;
-  const done = tasks.filter(t => t.status === 'done').length;
-  const ip = tasks.filter(t => t.status === 'in-progress').length;
-  const unassigned = tasks.filter(t => !t.assignee).length;
+    function updateSummary() {
+      const total = tasks.length;
+      const done = tasks.filter(t => t.status === 'done').length;
+      const ip = tasks.filter(t => t.status === 'in-progress').length;
+      const unassigned = tasks.filter(t => !t.assignee).length;
 
-  document.getElementById('totalTasks').textContent = total;
-  document.getElementById('completedTasks').textContent = done;
-  document.getElementById('inProgressTasks').textContent = ip;
-  document.getElementById('unassignedTasks').textContent = unassigned;
-}
+      document.getElementById('totalTasks').textContent = total;
+      document.getElementById('completedTasks').textContent = done;
+      document.getElementById('inProgressTasks').textContent = ip;
+      document.getElementById('unassignedTasks').textContent = unassigned;
+    }
 
-// ═══════════════ MODAL ═══════════════
-function openEditModal(idx) {
-  isAddMode = false;
-  editingIndex = idx;
-  const t = tasks[idx];
-  document.getElementById('modalTitle').textContent = 'Edit Task';
-  document.getElementById('modalTaskName').value = t.name;
-  document.getElementById('modalAssignee').value = t.assignee || '';
-  document.getElementById('modalStatus').value = t.status;
-  document.getElementById('modalPriority').value = t.priority;
-  document.getElementById('editModal').classList.add('show');
-}
+    // ═══════════════ MODAL ═══════════════
+    function openEditModal(idx) {
+      isAddMode = false;
+      editingIndex = idx;
+      const t = tasks[idx];
+      document.getElementById('modalTitle').textContent = 'Edit Task';
+      document.getElementById('modalTaskName').value = t.name;
+      document.getElementById('modalAssignee').value = t.assignee || '';
+      document.getElementById('modalStatus').value = t.status;
+      document.getElementById('modalPriority').value = t.priority;
+      document.getElementById('editModal').classList.add('show');
+    }
 
-function openAddModal() {
-  isAddMode = true;
-  editingIndex = null;
-  document.getElementById('modalTitle').textContent = 'Add New Task';
-  document.getElementById('modalTaskName').value = '';
-  document.getElementById('modalAssignee').value = '';
-  document.getElementById('modalStatus').value = 'todo';
-  document.getElementById('modalPriority').value = 'medium';
-  document.getElementById('editModal').classList.add('show');
-}
+    function openAddModal() {
+      isAddMode = true;
+      editingIndex = null;
+      document.getElementById('modalTitle').textContent = 'Add New Task';
+      document.getElementById('modalTaskName').value = '';
+      document.getElementById('modalAssignee').value = '';
+      document.getElementById('modalStatus').value = 'todo';
+      document.getElementById('modalPriority').value = 'medium';
+      document.getElementById('editModal').classList.add('show');
+    }
 
-function closeModal() {
-  document.getElementById('editModal').classList.remove('show');
-}
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('show');
+    }
 
-function saveModal() {
-  const name = document.getElementById('modalTaskName').value.trim();
-  const assignee = document.getElementById('modalAssignee').value;
-  const status = document.getElementById('modalStatus').value;
-  const priority = document.getElementById('modalPriority').value;
+    function saveModal() {
+      const name = document.getElementById('modalTaskName').value.trim();
+      const assignee = document.getElementById('modalAssignee').value;
+      const status = document.getElementById('modalStatus').value;
+      const priority = document.getElementById('modalPriority').value;
 
-  if (!name) return;
+      if (!name) return;
 
-  if (isAddMode) {
-    tasks.push({
-      phase: "Phase 5: Demo Script & Pitch",
-      name,
-      priority,
-      status,
-      assignee
-    });
-  } else if (editingIndex !== null) {
-    tasks[editingIndex].name = name;
-    tasks[editingIndex].assignee = assignee;
-    tasks[editingIndex].status = status;
-    tasks[editingIndex].priority = priority;
-  }
+      if (isAddMode) {
+        tasks.push({
+          phase: "Phase 5: Demo Script & Pitch",
+          name,
+          priority,
+          status,
+          assignee
+        });
+      } else if (editingIndex !== null) {
+        tasks[editingIndex].name = name;
+        tasks[editingIndex].assignee = assignee;
+        tasks[editingIndex].status = status;
+        tasks[editingIndex].priority = priority;
+      }
 
-  saveTasks();
-  renderTasks();
-  closeModal();
-}
+      saveTasks();
+      renderTasks();
+      closeModal();
+    }
 
-// ═══════════════ DASHBOARD ═══════════════
-function updateDashboard() {
-  const total = tasks.length;
-  const done = tasks.filter(t => t.status === 'done').length;
-  const ip = tasks.filter(t => t.status === 'in-progress').length;
-  const todo = total - done - ip;
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+    // ═══════════════ DASHBOARD ═══════════════
+    function updateDashboard() {
+      const total = tasks.length;
+      const done = tasks.filter(t => t.status === 'done').length;
+      const ip = tasks.filter(t => t.status === 'in-progress').length;
+      const todo = total - done - ip;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 
-  // KPIs
-  document.getElementById('kpiCompletion').textContent = pct + '%';
-  document.getElementById('kpiOnTrack').textContent = done + '/' + total;
+      // KPIs
+      document.getElementById('kpiCompletion').textContent = pct + '%';
+      document.getElementById('kpiOnTrack').textContent = done + '/' + total;
 
-  const phases = [...new Set(tasks.map(t => t.phase))];
-  const phasesDone = phases.filter(p => {
-    const pt = tasks.filter(t => t.phase === p);
-    return pt.length > 0 && pt.every(t => t.status === 'done');
-  }).length;
-  document.getElementById('kpiPhases').textContent = phasesDone + '/' + phases.length;
-  document.getElementById('kpiVelocity').textContent = total > 0 ? Math.round(total / phases.length) : 0;
+      const phases = [...new Set(tasks.map(t => t.phase))];
+      const phasesDone = phases.filter(p => {
+        const pt = tasks.filter(t => t.phase === p);
+        return pt.length > 0 && pt.every(t => t.status === 'done');
+      }).length;
+      document.getElementById('kpiPhases').textContent = phasesDone + '/' + phases.length;
+      document.getElementById('kpiVelocity').textContent = total > 0 ? Math.round(total / phases.length) : 0;
 
-  // Health indicator
-  const hi = document.getElementById('healthIndicator');
-  const ht = document.getElementById('healthText');
-  hi.className = 'health-indicator';
-  if (pct >= 80) { hi.classList.add('health-good'); ht.textContent = 'On Track'; }
-  else if (pct >= 30) { hi.classList.add('health-warning'); ht.textContent = 'In Progress'; }
-  else { hi.classList.add('health-danger'); ht.textContent = 'Getting Started'; }
+      // Health indicator
+      const hi = document.getElementById('healthIndicator');
+      const ht = document.getElementById('healthText');
+      hi.className = 'health-indicator';
+      if (pct >= 80) { hi.classList.add('health-good'); ht.textContent = 'On Track'; }
+      else if (pct >= 30) { hi.classList.add('health-warning'); ht.textContent = 'In Progress'; }
+      else { hi.classList.add('health-danger'); ht.textContent = 'Getting Started'; }
 
-  // Donut chart
-  const donut = document.getElementById('donutChart');
-  const doneP = total > 0 ? (done / total * 100) : 0;
-  const ipP = total > 0 ? (ip / total * 100) : 0;
-  const todoP = 100 - doneP - ipP;
-  donut.style.background = `conic-gradient(
+      // Donut chart
+      const donut = document.getElementById('donutChart');
+      const doneP = total > 0 ? (done / total * 100) : 0;
+      const ipP = total > 0 ? (ip / total * 100) : 0;
+      const todoP = 100 - doneP - ipP;
+      donut.style.background = `conic-gradient(
     #16A34A 0% ${doneP}%,
     #19A7A8 ${doneP}% ${doneP + ipP}%,
     #E2E8F0 ${doneP + ipP}% 100%
   )`;
-  donut.innerHTML = `<div class="donut-center">
+      donut.innerHTML = `<div class="donut-center">
     <div class="donut-center-value">${pct}%</div>
     <div class="donut-center-label">Complete</div>
   </div>`;
 
-  // Priority chart
-  const high = tasks.filter(t => t.priority === 'high').length;
-  const med = tasks.filter(t => t.priority === 'medium').length;
-  const low = tasks.filter(t => t.priority === 'low').length;
-  const maxP = Math.max(high, med, low, 1);
-  document.getElementById('priorityChart').innerHTML = `
+      // Priority chart
+      const high = tasks.filter(t => t.priority === 'high').length;
+      const med = tasks.filter(t => t.priority === 'medium').length;
+      const low = tasks.filter(t => t.priority === 'low').length;
+      const maxP = Math.max(high, med, low, 1);
+      document.getElementById('priorityChart').innerHTML = `
     <div class="bar-item">
       <div class="bar-label">🔴 High</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${high/maxP*100}%; background:var(--danger);"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${high / maxP * 100}%; background:var(--danger);"></div></div>
       <div class="bar-value">${high}</div>
     </div>
     <div class="bar-item">
       <div class="bar-label">🟡 Medium</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${med/maxP*100}%; background:var(--warning);"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${med / maxP * 100}%; background:var(--warning);"></div></div>
       <div class="bar-value">${med}</div>
     </div>
     <div class="bar-item">
       <div class="bar-label">🟢 Low</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${low/maxP*100}%; background:var(--success);"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${low / maxP * 100}%; background:var(--success);"></div></div>
       <div class="bar-value">${low}</div>
     </div>
   `;
 
-  // Phase progress
-  let phaseHTML = '';
-  phases.forEach(p => {
-    const pt = tasks.filter(t => t.phase === p);
-    const pd = pt.filter(t => t.status === 'done').length;
-    const pp = pt.length > 0 ? Math.round(pd / pt.length * 100) : 0;
-    phaseHTML += `<div class="phase-progress-item">
+      // Phase progress
+      let phaseHTML = '';
+      phases.forEach(p => {
+        const pt = tasks.filter(t => t.phase === p);
+        const pd = pt.filter(t => t.status === 'done').length;
+        const pp = pt.length > 0 ? Math.round(pd / pt.length * 100) : 0;
+        phaseHTML += `<div class="phase-progress-item">
       <div class="phase-progress-header">
         <div class="phase-progress-name">${p}</div>
         <div class="phase-progress-pct">${pp}%</div>
       </div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pp}%"></div></div>
     </div>`;
-  });
-  document.getElementById('phaseProgress').innerHTML = phaseHTML;
+      });
+      document.getElementById('phaseProgress').innerHTML = phaseHTML;
 
-  // Milestones
-  const milestones = [
-    { name: 'Project Kickoff', status: 'complete' },
-    { name: 'PRD & Product Strategy Complete', status: phasesDone >= 1 ? 'complete' : (pct > 0 ? 'active' : 'pending') },
-    { name: 'Information Architecture Finalized', status: phasesDone >= 2 ? 'complete' : (phasesDone >= 1 ? 'active' : 'pending') },
-    { name: 'Design System & UI Concepts Ready', status: phasesDone >= 3 ? 'complete' : (phasesDone >= 2 ? 'active' : 'pending') },
-    { name: 'Technical Architecture Built', status: phasesDone >= 4 ? 'complete' : (phasesDone >= 3 ? 'active' : 'pending') },
-    { name: 'Demo & Submission', status: phasesDone >= 5 ? 'complete' : (phasesDone >= 4 ? 'active' : 'pending') },
-  ];
+      // Milestones
+      const milestones = [
+        { name: 'Project Kickoff', status: 'complete' },
+        { name: 'PRD & Product Strategy Complete', status: phasesDone >= 1 ? 'complete' : (pct > 0 ? 'active' : 'pending') },
+        { name: 'Information Architecture Finalized', status: phasesDone >= 2 ? 'complete' : (phasesDone >= 1 ? 'active' : 'pending') },
+        { name: 'Design System & UI Concepts Ready', status: phasesDone >= 3 ? 'complete' : (phasesDone >= 2 ? 'active' : 'pending') },
+        { name: 'Technical Architecture Built', status: phasesDone >= 4 ? 'complete' : (phasesDone >= 3 ? 'active' : 'pending') },
+        { name: 'Demo & Submission', status: phasesDone >= 5 ? 'complete' : (phasesDone >= 4 ? 'active' : 'pending') },
+      ];
 
-  let msHTML = '';
-  milestones.forEach(m => {
-    const icon = m.status === 'complete' ? '✓' : m.status === 'active' ? '◉' : '○';
-    msHTML += `<div class="milestone-item">
+      let msHTML = '';
+      milestones.forEach(m => {
+        const icon = m.status === 'complete' ? '✓' : m.status === 'active' ? '◉' : '○';
+        msHTML += `<div class="milestone-item">
       <div class="milestone-status milestone-${m.status}">${icon}</div>
       <div class="milestone-info">
         <div class="milestone-name">${m.name}</div>
       </div>
     </div>`;
-  });
-  document.getElementById('milestoneList').innerHTML = msHTML;
-}
+      });
+      document.getElementById('milestoneList').innerHTML = msHTML;
+    }
 
-// ═══════════════ INIT ═══════════════
-loadTasks();
-renderTasks();
-</script>
+    // ═══════════════ INIT ═══════════════
+    loadTasks();
+    renderTasks();
+  </script>
 
 </body>
+
 </html>
