@@ -1,0 +1,586 @@
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif); background: var(--surface-0); }
+
+.page-wrapper { display: flex; flex-direction: column; height: 100vh; }
+
+.top-bar { background: var(--fill-accent); color: var(--on-accent); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; gap: 12px; flex-wrap: wrap; }
+.top-bar a { color: var(--on-accent); text-decoration: none; font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 2px; }
+.top-bar a:hover { border-bottom-color: white; }
+.github-btn { background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.4); color: var(--on-accent); cursor: pointer; font-weight: 500; text-decoration: none; display: inline-block; }
+.github-btn:hover { background: rgba(255,255,255,0.3); }
+
+.tabs-header { background: var(--surface-1); border-bottom: 0.5px solid var(--border); display: flex; gap: 0; padding: 0; }
+.tab-btn { flex: 1; padding: 16px 12px; border: none; background: none; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-secondary); text-align: center; transition: all 0.2s; border-bottom: 2px solid transparent; }
+.tab-btn.active { color: var(--text-primary); border-bottom-color: var(--fill-accent); }
+.tab-btn:hover { color: var(--text-primary); }
+
+.tab-content { flex: 1; overflow-y: auto; padding: 2rem 1rem; }
+.page { display: none; }
+.page.active { display: block; }
+
+.container { max-width: 900px; margin: 0 auto; }
+
+.header { margin-bottom: 2rem; }
+.project-title { font-size: 28px; font-weight: 500; color: var(--text-primary); margin-bottom: 0.5rem; }
+.project-status { display: inline-block; padding: 6px 12px; background: var(--bg-success); color: var(--text-success); border-radius: var(--radius); font-size: 12px; font-weight: 500; }
+
+.card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.card-title { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 1rem; }
+.card-content { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+.deploy-card { background: linear-gradient(135deg, var(--bg-accent), var(--surface-1)); border: 2px solid var(--border-accent); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; }
+.deploy-title { font-size: 16px; font-weight: 500; color: var(--text-accent); margin-bottom: 1rem; }
+.deploy-steps { list-style: none; padding: 0; }
+.deploy-step { padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1); display: flex; gap: 12px; }
+.deploy-step:last-child { border-bottom: none; }
+.step-num { font-weight: 600; color: var(--text-accent); min-width: 24px; }
+.step-text { flex: 1; color: var(--text-primary); }
+
+.copy-code { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px; margin: 8px 0; font-family: monospace; font-size: 12px; color: var(--text-primary); overflow-x: auto; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.copy-btn { padding: 4px 12px; background: var(--fill-accent); color: var(--on-accent); border: none; border-radius: var(--radius); cursor: pointer; font-size: 11px; font-weight: 500; }
+.copy-btn:hover { opacity: 0.9; }
+.copy-btn.copied { background: var(--fill-success); }
+
+.url-display { padding: 12px; background: var(--surface-1); border-radius: var(--radius); border: 1px dashed var(--border-accent); margin: 8px 0; font-family: monospace; font-size: 12px; word-break: break-all; }
+
+.link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
+.link-card { padding: 1rem; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 12px; }
+.link-label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+.link-value { font-family: monospace; font-size: 11px; color: var(--text-primary); word-break: break-all; }
+.link-action { margin-top: 8px; display: flex; gap: 6px; }
+.link-action button { flex: 1; padding: 4px 8px; font-size: 11px; background: var(--fill-accent); color: var(--on-accent); border: none; border-radius: var(--radius); cursor: pointer; }
+
+.objectives { list-style: none; padding: 0; }
+.objective-item { padding: 12px 0; border-bottom: 0.5px solid var(--border); display: flex; gap: 12px; }
+.objective-item:last-child { border-bottom: none; }
+.objective-icon { font-size: 20px; color: var(--text-success); }
+.objective-text { flex: 1; }
+.objective-name { font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+.objective-desc { font-size: 12px; color: var(--text-secondary); }
+
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.team-member { padding: 1rem; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 12px; text-align: center; }
+.avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--bg-accent); color: var(--text-accent); display: flex; align-items: center; justify-content: center; font-weight: 500; margin: 0 auto 8px; font-size: 14px; }
+.team-name { font-weight: 500; color: var(--text-primary); font-size: 13px; margin-bottom: 4px; }
+.team-role { font-size: 11px; color: var(--text-secondary); }
+
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.summary-card { padding: 1rem; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 12px; text-align: center; }
+.summary-value { font-size: 24px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+.summary-label { font-size: 12px; color: var(--text-secondary); }
+
+.controls { display: flex; gap: 8px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.filter-btn { padding: 8px 16px; border: 0.5px solid var(--border); background: var(--surface-1); border-radius: var(--radius); cursor: pointer; font-size: 13px; color: var(--text-primary); }
+.filter-btn.active { background: var(--fill-accent); color: var(--on-accent); border-color: var(--border-accent); }
+
+.hour-header { padding: 12px 12px; background: var(--surface-1); border: 0.5px solid var(--border); font-weight: 500; color: var(--text-primary); margin-top: 1.5rem; margin-bottom: 0; border-radius: 12px 12px 0 0; font-size: 13px; }
+.task-row { padding: 16px 12px; background: var(--surface-2); border: 0.5px solid var(--border); display: grid; grid-template-columns: 40px 1fr 100px 80px 60px; gap: 12px; align-items: center; }
+.task-row:not(:last-child) { border-bottom: none; }
+.task-row:hover { background: var(--surface-1); }
+.task-row:last-child { border-radius: 0 0 12px 12px; }
+
+.task-checkbox { width: 20px; height: 20px; cursor: pointer; }
+.task-info { }
+.task-name { font-weight: 500; color: var(--text-primary); font-size: 14px; margin-bottom: 4px; }
+.task-meta { font-size: 12px; color: var(--text-secondary); }
+
+.priority { text-align: center; }
+.priority-high { color: var(--text-danger); font-weight: 500; font-size: 12px; }
+.priority-medium { color: var(--text-warning); font-weight: 500; font-size: 12px; }
+.priority-low { color: var(--text-success); font-weight: 500; font-size: 12px; }
+
+.assignee { font-size: 12px; color: var(--text-secondary); background: var(--bg-accent); color: var(--text-accent); padding: 4px 8px; border-radius: var(--radius); text-align: center; }
+.assignee-empty { color: var(--text-muted); font-style: italic; }
+
+.status { text-align: center; }
+.status-badge { display: inline-block; padding: 4px 8px; border-radius: var(--radius); font-size: 11px; font-weight: 500; }
+.status-todo { background: var(--bg-warning); color: var(--text-warning); }
+.status-in-progress { background: var(--bg-accent); color: var(--text-accent); }
+.status-done { background: var(--bg-success); color: var(--text-success); }
+
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 2rem; }
+.kpi-card { padding: 1.5rem 1rem; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 12px; text-align: center; }
+.kpi-value { font-size: 32px; font-weight: 500; color: var(--text-primary); margin-bottom: 6px; }
+.kpi-label { font-size: 12px; color: var(--text-secondary); font-weight: 500; }
+
+.chart-section { background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.chart-title { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 1rem; }
+.charts-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.chart-container { position: relative; height: 280px; }
+
+.modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
+.modal.show { display: flex; }
+.modal-content { background: var(--surface-2); border-radius: 12px; padding: 2rem; max-width: 400px; width: 90%; }
+.modal-title { font-size: 18px; font-weight: 500; margin-bottom: 1rem; color: var(--text-primary); }
+.modal-field { margin-bottom: 1rem; }
+.modal-label { display: block; font-size: 12px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+.modal-input, .modal-select { width: 100%; padding: 8px 12px; border: 0.5px solid var(--border); border-radius: var(--radius); font-size: 14px; }
+.modal-button { padding: 8px 16px; background: var(--fill-accent); color: var(--on-accent); border: none; border-radius: var(--radius); cursor: pointer; font-weight: 500; }
+.modal-close { background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 20px; }
+
+.refresh-btn { padding: 8px 16px; background: var(--fill-accent); color: var(--on-accent); border: none; border-radius: var(--radius); cursor: pointer; font-weight: 500; margin-bottom: 1rem; }
+
+.tab-content-warning { background: var(--bg-warning); color: var(--text-warning); padding: 12px; border-radius: var(--radius); margin-bottom: 1rem; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="page-wrapper">
+  
+  <div class="top-bar">
+    <div>
+      <strong>🚀 Deploy to GitHub Pages:</strong>
+      <a href="https://github.com/new" target="_blank">Create Repo</a> |
+      <a href="https://docs.github.com/en/pages" target="_blank">GitHub Pages Docs</a>
+    </div>
+    <a href="https://github.com" class="github-btn" target="_blank">Go to GitHub</a>
+  </div>
+
+  <div class="tabs-header">
+    <button class="tab-btn active" onclick="switchTab('deploy')">🚀 Deploy setup</button>
+    <button class="tab-btn" onclick="switchTab('profile')">📋 Project profile</button>
+    <button class="tab-btn" onclick="switchTab('tasks')">✅ Task management</button>
+    <button class="tab-btn" onclick="switchTab('dashboard')">📈 Progress dashboard</button>
+  </div>
+
+  <div class="tab-content">
+    
+    <div id="deploy" class="page active">
+      <div class="container">
+        <div class="header">
+          <h1 class="project-title">🚀 GitHub Pages Deployment</h1>
+          <span class="project-status">Quick setup: 5 minutes</span>
+        </div>
+
+        <div class="tab-content-warning">
+          <strong>Pro Tip:</strong> Deploy this page in 5 minutes to get a live shareable link for your entire team!
+        </div>
+
+        <div class="deploy-card">
+          <h2 class="deploy-title">Step-by-step setup (No coding required)</h2>
+          <ul class="deploy-steps">
+            <li class="deploy-step">
+              <div class="step-num">1</div>
+              <div class="step-text">
+                <strong>Create GitHub repository</strong>
+                <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">Go to <a href="https://github.com/new" target="_blank" style="color: var(--text-accent);">github.com/new</a></p>
+              </div>
+            </li>
+            <li class="deploy-step">
+              <div class="step-num">2</div>
+              <div class="step-text">
+                <strong>Upload siraj-hackathon.html</strong>
+                <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">Click "Add file" → "Upload files" → Drag & drop file → Commit</p>
+              </div>
+            </li>
+            <li class="deploy-step">
+              <div class="step-num">3</div>
+              <div class="step-text">
+                <strong>Enable GitHub Pages</strong>
+                <p style="color: var(--text-secondary); font-size: 12px; margin-top: 4px;">Settings → Pages → Source: main branch, Folder: / (root) → Save</p>
+              </div>
+            </li>
+            <li class="deploy-step">
+              <div class="step-num">4</div>
+              <div class="step-text">
+                <strong>Get your live link</strong>
+                <p style="color: var(--text-accent); font-size: 12px; margin-top: 4px; font-weight: 500;">https://USERNAME.github.io/siraj-hackathon/siraj-hackathon.html</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Your live URLs (After deployment)</h2>
+          <div class="link-grid">
+            <div class="link-card">
+              <div class="link-label">Live landing page</div>
+              <div class="link-value">https://USERNAME.github.io/siraj-hackathon/siraj-hackathon.html</div>
+              <div class="link-action">
+                <button onclick="copyToClipboard('https://USERNAME.github.io/siraj-hackathon/siraj-hackathon.html')">Copy</button>
+              </div>
+            </div>
+            <div class="link-card">
+              <div class="link-label">GitHub repository</div>
+              <div class="link-value">https://github.com/USERNAME/siraj-hackathon</div>
+              <div class="link-action">
+                <button onclick="copyToClipboard('https://github.com/USERNAME/siraj-hackathon')">Copy</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Share with your team</h2>
+          <div class="card-content">
+            <p><strong>1. Copy your live link and send via:</strong></p>
+            <ul style="margin-left: 20px; margin-top: 8px; color: var(--text-secondary);">
+              <li>Slack / Discord</li>
+              <li>Email</li>
+              <li>Google Drive</li>
+              <li>Hackathon submission form</li>
+            </ul>
+
+            <p style="margin-top: 16px;"><strong>2. Team members can then:</strong></p>
+            <ul style="margin-left: 20px; margin-top: 8px; color: var(--text-secondary);">
+              <li>✅ Click link to open live page</li>
+              <li>✅ Assign themselves to tasks</li>
+              <li>✅ Update task status</li>
+              <li>✅ Check progress dashboard</li>
+              <li>✅ No installation needed</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="profile" class="page">
+      <div class="container">
+        <div class="header">
+          <h1 class="project-title">Siraj – AI Financial Copilot</h1>
+          <span class="project-status">In progress</span>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Project overview</h2>
+          <div class="card-content">
+            <p>Siraj is an intelligent financial advisor powered by AI that helps Saudi users understand their money, improve spending habits, and make confident financial decisions.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Team members</h2>
+          <div class="team-grid">
+            <div class="team-member">
+              <div class="avatar">TL</div>
+              <div class="team-name">Tech Lead</div>
+              <div class="team-role">Backend &amp; Database</div>
+            </div>
+            <div class="team-member">
+              <div class="avatar">FL</div>
+              <div class="team-name">Frontend Lead</div>
+              <div class="team-role">React &amp; UI</div>
+            </div>
+            <div class="team-member">
+              <div class="avatar">AI</div>
+              <div class="team-name">AI/ML Engineer</div>
+              <div class="team-role">LLM Integration</div>
+            </div>
+            <div class="team-member">
+              <div class="avatar">PD</div>
+              <div class="team-name">Product/Design</div>
+              <div class="team-role">UX &amp; Demo</div>
+            </div>
+            <div class="team-member">
+              <div class="avatar">DO</div>
+              <div class="team-name">DevOps</div>
+              <div class="team-role">Deployment &amp; Testing</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tasks" class="page">
+      <div class="container">
+        <h1 class="project-title" style="margin-bottom: 2rem;">Task management</h1>
+
+        <div class="summary">
+          <div class="summary-card">
+            <div class="summary-value" id="totalTasks">30</div>
+            <div class="summary-label">Total tasks</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-value" id="completedTasks">0</div>
+            <div class="summary-label">Completed</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-value" id="inProgressTasks">0</div>
+            <div class="summary-label">In progress</div>
+          </div>
+          <div class="summary-card">
+            <div class="summary-value" id="unassignedTasks">30</div>
+            <div class="summary-label">Unassigned</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="filter-btn active" onclick="filterTasks('all')">All</button>
+          <button class="filter-btn" onclick="filterTasks('unassigned')">Unassigned</button>
+          <button class="filter-btn" onclick="filterTasks('in-progress')">In progress</button>
+          <button class="filter-btn" onclick="filterTasks('high')">High priority</button>
+        </div>
+
+        <div id="tasksContainer"></div>
+      </div>
+    </div>
+
+    <div id="dashboard" class="page">
+      <div class="container">
+        <h1 class="project-title" style="margin-bottom: 0.5rem;">Progress dashboard</h1>
+
+        <button class="refresh-btn" onclick="updateDashboard()">Refresh data</button>
+
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-value" id="completionRate">0%</div>
+            <div class="kpi-label">Completion rate</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value" id="tasksOnTrack">0</div>
+            <div class="kpi-label">Tasks on track</div>
+          </div>
+        </div>
+
+        <div class="charts-row">
+          <div class="chart-section">
+            <h3 class="chart-title">Task completion</h3>
+            <div class="chart-container">
+              <canvas id="statusChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="chart-section">
+            <h3 class="chart-title">Phase distribution</h3>
+            <div class="chart-container">
+              <canvas id="phaseChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div id="assignModal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <h2 class="modal-title">Edit task</h2>
+    <div class="modal-field">
+      <label class="modal-label">Assignee</label>
+      <select class="modal-select" id="assigneeSelect">
+        <option>Unassigned</option>
+        <option>Tech Lead</option>
+        <option>Frontend Lead</option>
+        <option>AI/ML Engineer</option>
+        <option>Product/Design</option>
+        <option>DevOps</option>
+      </select>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Status</label>
+      <select class="modal-select" id="statusSelect">
+        <option value="todo">To do</option>
+        <option value="in-progress">In progress</option>
+        <option value="done">Done</option>
+      </select>
+    </div>
+    <button class="modal-button" onclick="saveTask()">Save</button>
+  </div>
+</div>
+
+<script>
+const tasks = [
+  { hour: "1-2", name: "Database setup", role: "Tech Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "1-2", name: "React setup", role: "Frontend Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "1-2", name: "Test Claude API", role: "AI/ML Engineer", priority: "high", status: "todo", assignee: null },
+  { hour: "3-4", name: "API routes", role: "Tech Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "3-4", name: "React layout", role: "Frontend Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "5-6", name: "Health score API", role: "Tech Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "5-6", name: "Integration", role: "Frontend Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "7-8", name: "Database seed", role: "Tech Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "7-8", name: "Dashboard page", role: "Frontend Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "9-10", name: "Health score calc", role: "Tech Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "9-10", name: "Coach endpoint", role: "AI/ML Engineer", priority: "high", status: "todo", assignee: null },
+  { hour: "11-12", name: "Coach UI", role: "Frontend Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "11-12", name: "Tune prompt", role: "AI/ML Engineer", priority: "high", status: "todo", assignee: null },
+  { hour: "14-15", name: "Mobile testing", role: "Frontend Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "14-15", name: "Demo practice", role: "Product/Design", priority: "high", status: "todo", assignee: null },
+  { hour: "14-15", name: "Deploy", role: "DevOps", priority: "high", status: "todo", assignee: null },
+  { hour: "16-17", name: "Final checks", role: "DevOps", priority: "high", status: "todo", assignee: null },
+  { hour: "1-2", name: "Infrastructure setup", role: "DevOps", priority: "high", status: "todo", assignee: null },
+  { hour: "3-4", name: "Create designs", role: "Product/Design", priority: "medium", status: "todo", assignee: null },
+  { hour: "5-6", name: "UI review", role: "Product/Design", priority: "medium", status: "todo", assignee: null },
+  { hour: "7-8", name: "Demo outline", role: "Product/Design", priority: "medium", status: "todo", assignee: null },
+  { hour: "3-4", name: "Test API", role: "DevOps", priority: "medium", status: "todo", assignee: null },
+  { hour: "5-6", name: "Fix CORS", role: "DevOps", priority: "high", status: "todo", assignee: null },
+  { hour: "7-8", name: "E2E testing", role: "DevOps", priority: "high", status: "todo", assignee: null },
+  { hour: "5-6", name: "Prompt v1", role: "AI/ML Engineer", priority: "high", status: "todo", assignee: null },
+  { hour: "7-8", name: "Prompt v2", role: "AI/ML Engineer", priority: "medium", status: "todo", assignee: null },
+  { hour: "9-10", name: "Display score", role: "Frontend Lead", priority: "high", status: "todo", assignee: null },
+  { hour: "11-12", name: "Full demo script", role: "Product/Design", priority: "high", status: "todo", assignee: null },
+  { hour: "11-12", name: "Integration test", role: "DevOps", priority: "high", status: "todo", assignee: null },
+  { hour: "16-17", name: "Submit", role: "DevOps", priority: "high", status: "todo", assignee: null }
+];
+
+let currentFilter = "all", editingTaskIndex = null, statusChart, phaseChart;
+
+function switchTab(tabName) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById(tabName).classList.add("active");
+  event.target.classList.add("active");
+  if (tabName === "dashboard") setTimeout(() => updateDashboard(), 100);
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = "Copied!";
+    btn.style.background = "var(--fill-success)";
+    setTimeout(() => {
+      btn.textContent = "Copy";
+      btn.style.background = "var(--fill-accent)";
+    }, 2000);
+  });
+}
+
+function updateSummary() {
+  const total = tasks.length;
+  const completed = tasks.filter(t => t.status === "done").length;
+  const inProgress = tasks.filter(t => t.status === "in-progress").length;
+  const unassigned = tasks.filter(t => !t.assignee).length;
+  
+  document.getElementById("totalTasks").textContent = total;
+  document.getElementById("completedTasks").textContent = completed;
+  document.getElementById("inProgressTasks").textContent = inProgress;
+  document.getElementById("unassignedTasks").textContent = unassigned;
+}
+
+function filterTasks(filter) {
+  currentFilter = filter;
+  document.querySelectorAll(".filter-btn").forEach(btn => btn.classList.remove("active"));
+  event.target.classList.add("active");
+  renderTasks();
+}
+
+function renderTasks() {
+  const grouped = {};
+  tasks.forEach((task, idx) => {
+    if (!grouped[task.hour]) grouped[task.hour] = [];
+    grouped[task.hour].push({...task, index: idx});
+  });
+  
+  let html = "";
+  Object.keys(grouped).sort((a, b) => parseInt(a) - parseInt(b)).forEach(hour => {
+    const hourTasks = grouped[hour];
+    html += `<div class="hour-header">Hour ${hour}</div>`;
+    
+    hourTasks.forEach((task) => {
+      if (currentFilter !== "all") {
+        if (currentFilter === "unassigned" && task.assignee) return;
+        if (currentFilter === "in-progress" && task.status !== "in-progress") return;
+        if (currentFilter === "high" && task.priority !== "high") return;
+      }
+      
+      const priorityClass = `priority-${task.priority}`;
+      const statusClass = `status-${task.status}`;
+      
+      html += `<div class="task-row" style="margin-top: -0.5px;">
+        <input type="checkbox" class="task-checkbox" onchange="toggleTask(${task.index})" ${task.status === 'done' ? 'checked' : ''}>
+        <div class="task-info">
+          <div class="task-name">${task.name}</div>
+          <div class="task-meta">${task.role}</div>
+        </div>
+        <div class="priority"><span class="${priorityClass}">${task.priority}</span></div>
+        <div class="assignee ${!task.assignee ? 'assignee-empty' : ''}">
+          ${task.assignee || 'Unassigned'}
+        </div>
+        <div class="status">
+          <span class="status-badge ${statusClass}">${task.status === 'todo' ? 'To do' : task.status === 'in-progress' ? 'In progress' : 'Done'}</span>
+          <button onclick="openEditModal(${task.index})" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; margin-left: 8px;">Edit</button>
+        </div>
+      </div>`;
+    });
+  });
+  
+  document.getElementById("tasksContainer").innerHTML = html;
+}
+
+function toggleTask(index) {
+  tasks[index].status = tasks[index].status === "done" ? "todo" : "done";
+  updateSummary();
+  renderTasks();
+}
+
+function openEditModal(index) {
+  editingTaskIndex = index;
+  const task = tasks[index];
+  document.getElementById("assigneeSelect").value = task.assignee || "Unassigned";
+  document.getElementById("statusSelect").value = task.status;
+  document.getElementById("assignModal").classList.add("show");
+}
+
+function closeModal() {
+  document.getElementById("assignModal").classList.remove("show");
+}
+
+function saveTask() {
+  if (editingTaskIndex === null) return;
+  const assignee = document.getElementById("assigneeSelect").value;
+  tasks[editingTaskIndex].assignee = assignee === "Unassigned" ? null : assignee;
+  tasks[editingTaskIndex].status = document.getElementById("statusSelect").value;
+  updateSummary();
+  renderTasks();
+  closeModal();
+}
+
+function updateDashboard() {
+  const total = tasks.length;
+  const done = tasks.filter(t => t.status === "done").length;
+  const inProgress = tasks.filter(t => t.status === "in-progress").length;
+  const todo = total - done - inProgress;
+  
+  document.getElementById("completionRate").textContent = Math.round((done / total) * 100) + "%";
+  document.getElementById("tasksOnTrack").textContent = done + "/" + total;
+  
+  updateCharts(done, inProgress, todo);
+}
+
+function updateCharts(done, inProgress, todo) {
+  const statusCtx = document.getElementById("statusChart").getContext("2d");
+  if (statusChart) statusChart.destroy();
+  statusChart = new Chart(statusCtx, {
+    type: "doughnut",
+    data: {
+      labels: ["Done", "In progress", "To do"],
+      datasets: [{
+        data: [done, inProgress, todo],
+        backgroundColor: ["#16a34a", "#378add", "#e5e7eb"],
+        borderColor: "var(--surface-1)",
+        borderWidth: 2
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom", labels: { font: { size: 12 }, color: "var(--text-primary)" } } } }
+  });
+  
+  const phaseCtx = document.getElementById("phaseChart").getContext("2d");
+  if (phaseChart) phaseChart.destroy();
+  phaseChart = new Chart(phaseCtx, {
+    type: "bar",
+    data: {
+      labels: ["Foundation", "Integration", "Polish"],
+      datasets: [{ label: "Tasks", data: [8, 9, 13], backgroundColor: "#378add", borderRadius: 8, borderSkipped: false }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, indexAxis: "y", plugins: { legend: { display: false } }, scales: { x: { ticks: { color: "var(--text-secondary)" } }, y: { ticks: { color: "var(--text-secondary)" } } } }
+  });
+}
+
+window.addEventListener("click", (e) => {
+  const modal = document.getElementById("assignModal");
+  if (e.target === modal) closeModal();
+});
+
+updateSummary();
+renderTasks();
+</script>
+
+</body>
+</html>

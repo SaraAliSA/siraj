@@ -1,0 +1,2459 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siraj (سراج) — AI Financial Copilot | Hackathon Execution Plan</title>
+  <meta name="description"
+    content="Siraj Hackathon Execution Plan. Understand money -> Ask Siraj -> Get insight -> Confirm safe action.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Arabic:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════════════════
+       DESIGN SYSTEM — Alinma Premium
+       ═══════════════════════════════════════════════════════════ */
+    :root {
+      --primary: #8785D2;
+      --primary-light: #a1a0df;
+      --primary-dark: #6e6cb5;
+      --secondary: #BD704D;
+      --secondary-light: #d38461;
+      --accent: #112240;
+      --accent-light: #404D65;
+      --accent-glow: rgba(17, 34, 64, 0.15);
+
+      --bg: #FBF7F4;
+      --bg-alt: #F3ECE6;
+      --surface: #FFFFFF;
+      --surface-elevated: #FFFFFF;
+
+      --success: #00966C;
+      --success-bg: rgba(0, 150, 108, 0.08);
+      --warning: #BD704D;
+      --warning-bg: rgba(189, 112, 77, 0.08);
+      --danger: #DC2626;
+      --danger-bg: rgba(220, 38, 38, 0.08);
+
+      --text-primary: #112240;
+      --text-secondary: #404D65;
+      --text-muted: #8E9BAE;
+      --text-inverse: #FFFFFF;
+
+      --border: #E8DFD8;
+      --border-light: #F2ECE6;
+
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+      --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+      --shadow-xl: 0 20px 60px rgba(0, 0, 0, 0.1);
+      --shadow-accent: 0 4px 20px rgba(25, 167, 168, 0.2);
+
+      --font-sans: 'Inter', 'Noto Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ═══════════════ RESET & BASE ═══════════════ */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+    }
+
+    /* ═══════════════ LAYOUT ═══════════════ */
+    .page-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ═══════════════ TOP HEADER BAR ═══════════════ */
+    .top-header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0, 59, 92, 0.3);
+    }
+
+    .logo-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent), var(--secondary));
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 2px 12px rgba(25, 167, 168, 0.4);
+    }
+
+    .logo-text {
+      color: var(--text-inverse);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-text .arabic {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      font-weight: 600;
+      margin-left: 6px;
+      opacity: 0.85;
+      font-size: 1.1rem;
+    }
+
+    .github-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--text-inverse);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: var(--transition);
+    }
+
+    .github-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .github-link svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    /* ═══════════════ TABS ═══════════════ */
+    .tabs-nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      padding: 0;
+      position: sticky;
+      top: 56px;
+      z-index: 99;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 16px 12px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-align: center;
+      transition: var(--transition);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      border-radius: 3px 3px 0 0;
+      transition: var(--transition);
+    }
+
+    .tab-btn:hover {
+      color: var(--text-secondary);
+      background: var(--bg);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab-btn.active::after {
+      width: 60%;
+    }
+
+    .tab-icon {
+      font-size: 1.1rem;
+    }
+
+    /* ═══════════════ TAB CONTENT ═══════════════ */
+    .tab-content {
+      flex: 1;
+      padding: 2rem 0 4rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+      animation: slideUp 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ═══════════════ CARDS ═══════════════ */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title .icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .icon-primary {
+      background: rgba(0, 59, 92, 0.08);
+      color: var(--primary);
+    }
+
+    .icon-accent {
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    .icon-secondary {
+      background: rgba(0, 150, 108, 0.08);
+      color: var(--secondary);
+    }
+
+    .icon-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .icon-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .icon-success {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TAB 1: PROJECT PROFILE
+       ═══════════════════════════════════════════════════════════ */
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary-dark) 100%);
+      border-radius: var(--radius-xl);
+      padding: 3rem 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(189, 112, 77, 0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .hero h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero h1 .arabic-name {
+      font-family: 'Noto Sans Arabic', sans-serif;
+      font-weight: 700;
+      background: linear-gradient(90deg, #4dd8d9, #88f0b0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.85;
+      line-height: 1.7;
+      max-width: 650px;
+      font-weight: 300;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: left;
+    }
+
+    .hero-stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .hero-stat-label {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    /* Section Headings */
+    .section-heading {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 2.5rem 0 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      margin-left: 12px;
+    }
+
+    /* Problem / Solution */
+    .split-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .problem-card {
+      border-left: 4px solid var(--danger);
+    }
+
+    .solution-card {
+      border-left: 4px solid var(--success);
+    }
+
+    .card-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card-list li {
+      padding: 8px 0;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+    }
+
+    .card-list li::before {
+      content: attr(data-icon);
+      flex-shrink: 0;
+      font-size: 0.9rem;
+    }
+
+    /* AI Features Grid */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      transition: var(--transition);
+      cursor: default;
+    }
+
+    .feature-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-accent);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, var(--accent-glow), rgba(0, 150, 108, 0.08));
+    }
+
+    .feature-name {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .feature-desc {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Tech Stack */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .tech-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .tech-item:hover {
+      border-color: var(--accent);
+    }
+
+    .tech-label {
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .tech-value {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .tech-sub {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Team Grid */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .team-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 1rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .team-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-md);
+    }
+
+    .team-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text-inverse);
+    }
+
+    .avatar-1 {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    }
+
+    .avatar-2 {
+      background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
+    }
+
+    .avatar-3 {
+      background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    }
+
+    .avatar-4 {
+      background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+    }
+
+    .avatar-5 {
+      background: linear-gradient(135deg, #F59E0B, #FBBF24);
+    }
+
+    .team-name {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .team-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .team-focus {
+      margin-top: 8px;
+      font-size: 0.6875rem;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    /* Timeline */
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 10px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--secondary), var(--primary));
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding: 0 0 1.75rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -24px;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      background: var(--surface);
+    }
+
+    .timeline-phase {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 2px;
+    }
+
+    .timeline-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .timeline-desc {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TAB 2: PLANNING & TASK MANAGEMENT
+       ═══════════════════════════════════════════════════════════ */
+
+    .task-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .task-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--secondary));
+      color: var(--text-inverse);
+      box-shadow: var(--shadow-accent);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(25, 167, 168, 0.3);
+    }
+
+    /* Summary Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .summary-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .summary-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .summary-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .summary-card.accent .summary-value {
+      color: var(--accent);
+    }
+
+    .summary-card.success .summary-value {
+      color: var(--success);
+    }
+
+    .summary-card.warning .summary-value {
+      color: var(--warning);
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      font-family: var(--font-sans);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .filter-btn.active {
+      background: var(--primary);
+      color: var(--text-inverse);
+      border-color: var(--primary);
+    }
+
+    /* Phase Headers */
+    .phase-header {
+      background: linear-gradient(90deg, var(--bg-alt), var(--bg));
+      padding: 12px 16px;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1.5rem;
+    }
+
+    .phase-header:first-of-type {
+      margin-top: 0;
+    }
+
+    .phase-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .phase-count {
+      font-size: 0.6875rem;
+      background: var(--primary);
+      color: var(--text-inverse);
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      font-weight: 600;
+    }
+
+    /* Task Rows */
+    .task-row {
+      display: grid;
+      grid-template-columns: 36px 1fr 100px 140px 100px 50px;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: none;
+      transition: var(--transition);
+      font-size: 0.875rem;
+    }
+
+    .task-row:last-child {
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    }
+
+    .task-row:hover {
+      background: var(--bg);
+    }
+
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+
+    .task-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .task-name.done {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .task-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Priority Badges */
+    .priority-badge {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      text-align: center;
+      text-transform: capitalize;
+    }
+
+    .priority-high {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .priority-medium {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .priority-low {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    /* Assignee Badges */
+    .assignee-badge {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      text-align: center;
+      font-weight: 500;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .assignee-set {
+      background: var(--accent-glow);
+      color: var(--accent);
+    }
+
+    .assignee-unset {
+      background: var(--bg-alt);
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      text-align: center;
+    }
+
+    .status-todo {
+      background: var(--bg-alt);
+      color: var(--text-muted);
+    }
+
+    .status-in-progress {
+      background: rgba(25, 167, 168, 0.1);
+      color: var(--accent);
+    }
+
+    .status-done {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .edit-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 1rem;
+      padding: 4px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .edit-btn:hover {
+      background: var(--bg-alt);
+      color: var(--accent);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TAB 3: STRATEGY & DETAILS
+       ═══════════════════════════════════════════════════════════ */
+    .list-group {
+      margin-bottom: 1.5rem;
+      padding-left: 1.25rem;
+    }
+    .list-group li {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .text-highlight {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+      text-align: left;
+    }
+    .data-table th, .data-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .data-table th {
+      background: var(--bg-alt);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: var(--radius-full);
+      background: var(--bg-alt);
+      color: var(--text-secondary);
+    }
+    .tag-must {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+    .tag-should {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+    .tag-nice {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       TAB 4: PROGRESS DASHBOARD
+       ═══════════════════════════════════════════════════════════ */
+
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .dashboard-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .health-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+
+    .health-good {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .health-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .health-danger {
+      background: var(--danger-bg);
+      color: var(--danger);
+    }
+
+    .health-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .kpi-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .kpi-card:nth-child(1)::before {
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+    }
+
+    .kpi-card:nth-child(2)::before {
+      background: linear-gradient(90deg, var(--success), #34d399);
+    }
+
+    .kpi-card:nth-child(3)::before {
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    }
+
+    .kpi-card:nth-child(4)::before {
+      background: linear-gradient(90deg, var(--warning), #fbbf24);
+    }
+
+    .kpi-value {
+      font-size: 2.25rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .kpi-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Charts Row */
+    .charts-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+    }
+
+    .chart-title {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1.25rem;
+    }
+
+    /* CSS Donut Chart */
+    .donut-chart {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      position: relative;
+    }
+
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .donut-center-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .donut-center-label {
+      font-size: 0.625rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .chart-legend {
+      display: flex;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    /* CSS Bar Chart */
+    .bar-chart {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bar-item {
+      display: grid;
+      grid-template-columns: 110px 1fr 50px;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bar-label {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    .bar-track {
+      height: 24px;
+      background: var(--bg-alt);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: var(--radius-full);
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      min-width: 4px;
+    }
+
+    .bar-value {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Phase Progress */
+    .phase-progress-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .phase-progress-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+    }
+
+    .phase-progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .phase-progress-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .phase-progress-pct {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: var(--bg-alt);
+      border-radius: var(--radius-full);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: var(--radius-full);
+      background: linear-gradient(90deg, var(--accent), var(--secondary));
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Milestone Timeline */
+    .milestone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .milestone-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .milestone-item:last-child {
+      border-bottom: none;
+    }
+
+    .milestone-status {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8125rem;
+      flex-shrink: 0;
+    }
+
+    .milestone-complete {
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .milestone-active {
+      background: var(--accent-glow);
+      color: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    .milestone-pending {
+      background: var(--bg-alt);
+      color: var(--text-muted);
+    }
+
+    .milestone-info {
+      flex: 1;
+    }
+
+    .milestone-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ═══════════════ MODAL ═══════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      width: 90%;
+      max-width: 420px;
+      box-shadow: var(--shadow-xl);
+      animation: slideUp 0.3s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      background: var(--bg-alt);
+      color: var(--text-primary);
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .form-select,
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      background: var(--surface);
+      transition: var(--transition);
+    }
+
+    .form-select:focus,
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    .btn-ghost {
+      background: var(--bg-alt);
+      color: var(--text-secondary);
+    }
+
+    .btn-ghost:hover {
+      background: var(--border);
+    }
+
+    /* ═══════════════ RESPONSIVE ═══════════════ */
+    @media (max-width: 900px) {
+      .split-grid, .detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .charts-row {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 2rem 1.5rem;
+      }
+
+      .hero h1 {
+        font-size: 1.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 0.9375rem;
+      }
+
+      .hero-stats {
+        gap: 1.25rem;
+      }
+
+      .hero-stat-value {
+        font-size: 1.25rem;
+      }
+
+      .tabs-nav {
+        top: 56px;
+      }
+
+      .tab-btn {
+        padding: 12px 6px;
+        font-size: 0.75rem;
+        gap: 4px;
+      }
+
+      .tab-icon {
+        font-size: 0.9rem;
+      }
+
+      .task-row {
+        grid-template-columns: 30px 1fr 70px 50px;
+        font-size: 0.8125rem;
+        padding: 10px 12px;
+      }
+
+      .task-row .assignee-badge,
+      .task-row .priority-badge {
+        display: none;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .tech-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .container {
+        padding: 0 1rem;
+      }
+
+      .tab-content {
+        padding: 1.25rem 0 3rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page-wrapper">
+    <!-- ═══════════════ TOP HEADER ═══════════════ -->
+    <header class="top-header">
+      <div class="logo-group">
+        <div class="logo-icon">S</div>
+        <div class="logo-text">
+          Siraj <span class="arabic">سراج</span> <span style="font-size: 0.8rem; font-weight: normal; opacity: 0.7;">— Execution Plan</span>
+        </div>
+      </div>
+      <a href="https://github.com/SaraAliSA/siraj" target="_blank" class="github-link">
+        <svg viewBox="0 0 16 16">
+          <path
+            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+        </svg>
+        GitHub
+      </a>
+    </header>
+
+    <!-- ═══════════════ TABS NAVIGATION ═══════════════ -->
+    <nav class="tabs-nav" role="tablist">
+      <button class="tab-btn active" role="tab" data-tab="tasks" onclick="switchTab('tasks', this)">
+        <span class="tab-icon">📌</span> Tasks & Milestones
+      </button>
+      <button class="tab-btn" role="tab" data-tab="schedule" onclick="switchTab('schedule', this)">
+        <span class="tab-icon">📅</span> Daily Schedule & Strategy
+      </button>
+      <button class="tab-btn" role="tab" data-tab="dashboard" onclick="switchTab('dashboard', this)">
+        <span class="tab-icon">📊</span> Progress Dashboard
+      </button>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════════════════════
+       TAB 1: PLANNING & TASKS
+       ═══════════════════════════════════════════════════════════ -->
+    <div class="tab-content">
+      <div id="tasks" class="tab-panel active">
+        <div class="container">
+
+          <div class="task-header">
+            <h2>Planning & Task Management</h2>
+            <button class="btn btn-primary" onclick="openAddModal()">
+              + Add Task
+            </button>
+          </div>
+
+          <!-- Summary -->
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="summary-value" id="totalTasks">0</div>
+              <div class="summary-label">Total Tasks</div>
+            </div>
+            <div class="summary-card success">
+              <div class="summary-value" id="completedTasks">0</div>
+              <div class="summary-label">Completed</div>
+            </div>
+            <div class="summary-card accent">
+              <div class="summary-value" id="inProgressTasks">0</div>
+              <div class="summary-label">In Progress</div>
+            </div>
+            <div class="summary-card warning">
+              <div class="summary-value" id="unassignedTasks">0</div>
+              <div class="summary-label">Unassigned</div>
+            </div>
+          </div>
+
+          <!-- Filters -->
+          <div class="filters">
+            <button class="filter-btn active" onclick="filterTasks('all', this)">All</button>
+            <button class="filter-btn" onclick="filterTasks('todo', this)">To Do</button>
+            <button class="filter-btn" onclick="filterTasks('in-progress', this)">In Progress</button>
+            <button class="filter-btn" onclick="filterTasks('done', this)">Done</button>
+            <button class="filter-btn" onclick="filterTasks('high', this)">🔴 Must Have</button>
+            <button class="filter-btn" onclick="filterTasks('medium', this)">🟡 Should Have</button>
+            <button class="filter-btn" onclick="filterTasks('unassigned', this)">Unassigned</button>
+          </div>
+
+          <!-- Task List Container -->
+          <div id="tasksContainer"></div>
+
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════
+         TAB 3: DAILY SCHEDULE & STRATEGY
+         ═══════════════════════════════════════════════════════════ -->
+      <div id="schedule" class="tab-panel">
+        <div class="container">
+          
+          <div class="hero" style="padding: 2rem 2.5rem; margin-bottom: 2rem; background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);">
+            <div class="hero-content">
+              <h2>Siraj Hackathon Core Objective</h2>
+              <p style="opacity: 0.9; margin-top: 5px; font-weight: 300;">
+                Build a stable working prototype of <strong>Siraj</strong>, an Arabic RTL AI financial advisor.
+                Deliver a clear, high-impact product story:
+              </p>
+              <div style="font-size: 1.15rem; font-weight: 700; margin-top: 15px; color: var(--secondary-light); border-right: 3px solid var(--secondary-light); padding-right: 12px; text-align: right; direction: rtl;">
+                فهم المال ⟵ اسأل سراج ⟵ احصل على البصيرة ⟵ تأكيد إجراء آمن
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Priorities -->
+          <h3 class="section-heading">🎯 Feature Priority Matrix</h3>
+          <div class="detail-grid">
+            <div class="card" style="border-top: 4px solid var(--danger);">
+              <div class="card-title"><span class="tag tag-must">Must Have</span> Required for Final Demo</div>
+              <ul class="card-list">
+                <li data-icon="•">Arabic RTL dashboard</li>
+                <li data-icon="•">Financial KPI cards & Basic charts</li>
+                <li data-icon="•">Transaction list & Expense categories</li>
+                <li data-icon="•">Siraj AI chat with simple intent detection</li>
+                <li data-icon="•">Mock API, mock data, and transfer confirmation flow</li>
+              </ul>
+            </div>
+            <div class="card" style="border-top: 4px solid var(--warning);">
+              <div class="card-title"><span class="tag tag-should">Should Have</span> Important if time allows</div>
+              <ul class="card-list">
+                <li data-icon="•">Financial health score</li>
+                <li data-icon="•">Savings recommendation</li>
+                <li data-icon="•">Reports page</li>
+                <li data-icon="•">Light / dark mode</li>
+                <li data-icon="•">UI polish & improved spacing/copy</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card" style="border-top: 4px solid var(--success); margin-bottom: 2rem;">
+            <div class="card-title"><span class="tag tag-nice">Nice to Have</span> Beyond MVP (Build only if ahead)</div>
+            <div class="split-grid" style="margin-top: 0.5rem;">
+              <ul class="card-list">
+                <li data-icon="•">Seasonal spending prediction</li>
+                <li data-icon="•">Unused subscription detection</li>
+              </ul>
+              <ul class="card-list">
+                <li data-icon="•">Real authentication & Real banking API integration</li>
+                <li data-icon="•">Advanced analytics & prediction</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Daily Schedule -->
+          <h3 class="section-heading">📅 Daily Hackathon Schedule</h3>
+          <div class="detail-grid">
+            <div class="card">
+              <div class="card-title"><div class="icon icon-primary">1</div> Day 1: Foundation</div>
+              <p><strong>Goal:</strong> Setup, MVP confirmation, base layout & mock data setup.</p>
+              <ul class="card-list" style="margin-top: 0.5rem;">
+                <li data-icon="🔧"><strong>Setup:</strong> Repo setup, branch strategy, dependencies.</li>
+                <li data-icon="💻"><strong>Frontend:</strong> RTL page layout, sidebar, page shells.</li>
+                <li data-icon="⚙️"><strong>Backend/AI:</strong> Mock database setup, chat UI.</li>
+              </ul>
+              <p style="font-size: 0.75rem; background: var(--bg-alt); padding: 8px; border-radius: var(--radius-sm); margin-top: 8px;">
+                <strong>Checkpoint:</strong> Merge all branches, fix setup issues, keep main working.
+              </p>
+            </div>
+            
+            <div class="card">
+              <div class="card-title"><div class="icon icon-primary">2</div> Day 2: Core Prototype</div>
+              <p><strong>Goal:</strong> Connect dashboard UI, build AI flow and transfer confirmation flow.</p>
+              <ul class="card-list" style="margin-top: 0.5rem;">
+                <li data-icon="📈"><strong>Frontend:</strong> KPI cards, charts, transaction list.</li>
+                <li data-icon="🤖"><strong>AI/Backend:</strong> Intent detection, mock transfer API, response template.</li>
+                <li data-icon="📄"><strong>Product:</strong> Demo flow script, presentation slides draft.</li>
+              </ul>
+              <p style="font-size: 0.75rem; background: var(--bg-alt); padding: 8px; border-radius: var(--radius-sm); margin-top: 8px;">
+                <strong>Checkpoint:</strong> Midday & evening merges. No large unmerged branches overnight.
+              </p>
+            </div>
+          </div>
+
+          <div class="card" style="margin-bottom: 2rem;">
+            <div class="card-title"><div class="icon icon-primary">3</div> Day 3: Polish and Demo</div>
+            <div class="split-grid">
+              <div>
+                <p><strong>Goal:</strong> UI Polish, Bug Fixes, Pitch rehearsals, and packaging.</p>
+                <ul class="card-list" style="margin-top: 0.5rem;">
+                  <li data-icon="🐞"><strong>QA:</strong> Fix all UI/API issues and flow edge cases.</li>
+                  <li data-icon="✨"><strong>UX:</strong> Color improvements, spacing, Arabic spelling.</li>
+                  <li data-icon="🗣️"><strong>Pitch:</strong> Rehearse full demo at least 3 times.</li>
+                </ul>
+              </div>
+              <div style="background: var(--bg-alt); padding: 1rem; border-radius: var(--radius-md); display: flex; flex-direction: column; justify-content: center;">
+                <p><strong>End of Day 3 Deliverables:</strong></p>
+                <ul class="card-list" style="font-size: 0.8rem;">
+                  <li data-icon="✓">Stable prototype deployed</li>
+                  <li data-icon="✓">Final presentation slides</li>
+                  <li data-icon="✓">Practiced demo with backup flow</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Implementation Strategy -->
+          <h3 class="section-heading">⚡ Recommended Implementation Order</h3>
+          <div class="card">
+            <div class="card-title"><div class="icon icon-accent">🔗</div> Critical Path Sequence</div>
+            <ol class="list-group" style="padding-left: 1.5rem;">
+              <li><strong>Mock Data Preparation:</strong> Create sample accounts, transaction lists, categories (Day 1).</li>
+              <li><strong>Backend API:</strong> Prepare FastAPI mock routes for transactions and summaries.</li>
+              <li><strong>Dashboard UI:</strong> Connect frontend pages to the API endpoints.</li>
+              <li><strong>AI Chat UI:</strong> Build conversational interface window.</li>
+              <li><strong>Intent Detection:</strong> Create logic matching questions to categories.</li>
+              <li><strong>Transfer Flow:</strong> Integrate transfer requests with confirmation dialogues.</li>
+              <li><strong>Integration & QA:</strong> Full cycle end-to-end testing of the story.</li>
+              <li><strong>Rehearsal:</strong> Practice running through the demo scripts.</li>
+            </ol>
+          </div>
+
+          <!-- Risks & Mitigation -->
+          <h3 class="section-heading">⚠️ Risks and Blockers</h3>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width: 25%;">Risk</th>
+                  <th style="width: 15%;">Impact</th>
+                  <th>Mitigation Strategy</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Scope Creep / Over-building</strong></td>
+                  <td><span class="tag tag-must">High</span></td>
+                  <td>Strictly stick to the Must Have list first. Freeze features early.</td>
+                </tr>
+                <tr>
+                  <td><strong>AI/LLM Latency & Failures</strong></td>
+                  <td><span class="tag tag-should">Medium</span></td>
+                  <td>Use simple rule-based intent matching & mock local templates as a backup.</td>
+                </tr>
+                <tr>
+                  <td><strong>Backend / Frontend mismatches</strong></td>
+                  <td><span class="tag tag-should">Medium</span></td>
+                  <td>Define API schemas and response formats before writing code.</td>
+                </tr>
+                <tr>
+                  <td><strong>Arabic RTL Layout Glitches</strong></td>
+                  <td><span class="tag tag-should">Medium</span></td>
+                  <td>Start testing in Arabic right-to-left layout from Day 1.</td>
+                </tr>
+                <tr>
+                  <td><strong>Demo Day Network Failure</strong></td>
+                  <td><span class="tag tag-must">High</span></td>
+                  <td>Prepare local offline mock responses and pre-record a backup video demo.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Team Roles -->
+          <h3 class="section-heading">👥 Team Roles & Responsibilities</h3>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Member</th>
+                  <th>Role</th>
+                  <th>Main Responsibility</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Member 1</strong></td>
+                  <td>Frontend Lead</td>
+                  <td>Dashboard UI, RTL CSS styling, charts, transaction table layout</td>
+                </tr>
+                <tr>
+                  <td><strong>Member 2</strong></td>
+                  <td>AI / Chat Lead</td>
+                  <td>Siraj chat logic, intent detection, response handling, prompts</td>
+                </tr>
+                <tr>
+                  <td><strong>Member 3</strong></td>
+                  <td>Backend Lead</td>
+                  <td>API creation, mock databases, transfer triggers, calculations</td>
+                </tr>
+                <tr>
+                  <td><strong>Member 4</strong></td>
+                  <td>UX / Product Lead</td>
+                  <td>User flow maps, design polish, presentation pitches, demo story</td>
+                </tr>
+                <tr>
+                  <td><strong>Member 5</strong></td>
+                  <td>QA / Integration Lead</td>
+                  <td>Integration tests, git branch coordination, mock data generator</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Final Demo Story Flow -->
+          <h3 class="section-heading">🎬 Demo Story Walkthrough</h3>
+          <div class="card" style="border-right: 4px solid var(--primary); margin-bottom: 2rem;">
+            <p style="margin-bottom: 1rem;">Use this clear, Judge-friendly story flow to showcase peak value in 3 minutes:</p>
+            <div class="split-grid">
+              <div style="background: var(--bg); padding: 12px; border-radius: var(--radius-sm);">
+                <span class="text-highlight">1. Open Dashboard:</span> Show financial status summary cards, expense distribution and latest transactions.
+              </div>
+              <div style="background: var(--bg); padding: 12px; border-radius: var(--radius-sm);">
+                <span class="text-highlight">2. Ask Spending:</span> Ask Siraj: <code style="font-family: var(--font-sans); color: var(--danger);">وين راحت فلوسي؟</code>
+              </div>
+              <div style="background: var(--bg); padding: 12px; border-radius: var(--radius-sm);">
+                <span class="text-highlight">3. Explaining Spending:</span> Siraj responds explaining budget consumption categories in natural Arabic.
+              </div>
+              <div style="background: var(--bg); padding: 12px; border-radius: var(--radius-sm);">
+                <span class="text-highlight">4. Trigger Action:</span> Ask Siraj: <code style="font-family: var(--font-sans); color: var(--danger);">أبي أحول</code>
+              </div>
+              <div style="background: var(--bg); padding: 12px; border-radius: var(--radius-sm);">
+                <span class="text-highlight">5. Confirm Safety:</span> The UI displays a secure transfer slide-in confirmation drawer.
+              </div>
+              <div style="background: var(--bg); padding: 12px; border-radius: var(--radius-sm);">
+                <span class="text-highlight">6. Completion:</span> Verify the transfer and view updated dashboard balance.
+              </div>
+            </div>
+          </div>
+
+          <!-- Definition of Done -->
+          <h3 class="section-heading">🏆 Definition of Done Checklist</h3>
+          <div class="card">
+            <ul class="card-list">
+              <li data-icon="☐">App launches with zero compile or console errors.</li>
+              <li data-icon="☐">Dashboard displays realistic accounts, balances and statistics.</li>
+              <li data-icon="☐">All charts render properly and update on data reload.</li>
+              <li data-icon="☐">Siraj AI chat resolves user intent queries (spending overview, transfers, help).</li>
+              <li data-icon="☐">Transfer verification triggers modal window and handles actions.</li>
+              <li data-icon="☐">Backup local workflow works when API endpoints fail.</li>
+              <li data-icon="☐">Demo flow rehearsed at least 3 times.</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════════════
+         TAB 4: PROGRESS DASHBOARD
+         ═══════════════════════════════════════════════════════════ -->
+      <div id="dashboard" class="tab-panel">
+        <div class="container">
+
+          <div class="dashboard-header">
+            <h2>Progress Dashboard</h2>
+            <div id="healthIndicator" class="health-indicator health-warning">
+              <span class="health-dot"></span>
+              <span id="healthText">In Progress</span>
+            </div>
+          </div>
+
+          <!-- KPIs -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-value" id="kpiCompletion">0%</div>
+              <div class="kpi-label">Completion Rate</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" id="kpiOnTrack">0/0</div>
+              <div class="kpi-label">Tasks Complete</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" id="kpiPhases">0/5</div>
+              <div class="kpi-label">Phases Done</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value" id="kpiVelocity">0</div>
+              <div class="kpi-label">Tasks / Phase</div>
+            </div>
+          </div>
+
+          <!-- Charts -->
+          <div class="charts-row">
+            <!-- Donut Chart -->
+            <div class="chart-card">
+              <div class="chart-title">Task Status Distribution</div>
+              <div id="donutChart" class="donut-chart"></div>
+              <div class="chart-legend">
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#00966C"></div> Done
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#8785D2"></div> In Progress
+                </div>
+                <div class="legend-item">
+                  <div class="legend-dot" style="background:#E2E8F0"></div> To Do
+                </div>
+              </div>
+            </div>
+
+            <!-- Bar Chart: Priority Distribution -->
+            <div class="chart-card">
+              <div class="chart-title">Priority Distribution</div>
+              <div id="priorityChart" class="bar-chart"></div>
+            </div>
+          </div>
+
+          <!-- Phase Progress -->
+          <h3 class="section-heading">📋 Phase Progress</h3>
+          <div id="phaseProgress" class="phase-progress-list"></div>
+
+          <!-- Milestones -->
+          <h3 class="section-heading" style="margin-top: 2.5rem;">🏆 Milestones</h3>
+          <div class="card">
+            <div id="milestoneList" class="milestone-list"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ EDIT TASK MODAL ═══════════════ -->
+  <div id="editModal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Edit Task</div>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div id="modalBody">
+        <div class="form-group">
+          <label class="form-label">Task Name</label>
+          <input type="text" class="form-input" id="modalTaskName" placeholder="Task name...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phase</label>
+          <select class="form-select" id="modalPhase">
+            <option>Phase 1: Setup and planning</option>
+            <option>Phase 2: Core prototype</option>
+            <option>Phase 3: AI flow</option>
+            <option>Phase 4: Integration</option>
+            <option>Phase 5: Polish and demo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Assignee</label>
+          <select class="form-select" id="modalAssignee">
+            <option value="">Unassigned</option>
+            <option>Member 1 (Frontend Lead)</option>
+            <option>Member 2 (AI / Chat Lead)</option>
+            <option>Member 3 (Backend Lead)</option>
+            <option>Member 4 (UX / Product Lead)</option>
+            <option>Member 5 (QA / Integration Lead)</option>
+            <option>Member 2 + 3</option>
+            <option>Member 4 + 5</option>
+            <option>All</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="modalStatus">
+            <option value="todo">To Do</option>
+            <option value="in-progress">In Progress</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select class="form-select" id="modalPriority">
+            <option value="high">Must Have</option>
+            <option value="medium">Should Have</option>
+            <option value="low">Nice to Have</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveModal()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ═══════════════════════════════════════════════════════════ -->
+  <script>
+    // ═══════════════ DEFAULT TASKS DATA ═══════════════
+    const DEFAULT_TASKS = [
+      // Phase 1: Setup and planning
+      { phase: "Phase 1: Setup and planning", name: "Create project repo and branches", priority: "high", status: "todo", assignee: "Member 5 (QA / Integration Lead)" },
+      { phase: "Phase 1: Setup and planning", name: "Create mock financial data", priority: "high", status: "todo", assignee: "Member 3 (Backend Lead)" },
+
+      // Phase 2: Core prototype
+      { phase: "Phase 2: Core prototype", name: "Build app layout RTL", priority: "high", status: "todo", assignee: "Member 1 (Frontend Lead)" },
+      { phase: "Phase 2: Core prototype", name: "Build dashboard KPI cards", priority: "high", status: "todo", assignee: "Member 1 (Frontend Lead)" },
+      { phase: "Phase 2: Core prototype", name: "Build charts", priority: "high", status: "todo", assignee: "Member 1 (Frontend Lead)" },
+      { phase: "Phase 2: Core prototype", name: "Build transaction API", priority: "high", status: "todo", assignee: "Member 3 (Backend Lead)" },
+      { phase: "Phase 2: Core prototype", name: "Build transaction list UI", priority: "high", status: "todo", assignee: "Member 1 (Frontend Lead)" },
+      { phase: "Phase 2: Core prototype", name: "Reports page", priority: "medium", status: "todo", assignee: "Member 1 (Frontend Lead)" },
+
+      // Phase 3: AI flow
+      { phase: "Phase 3: AI flow", name: "Build Siraj AI chat UI", priority: "high", status: "todo", assignee: "Member 2 (AI / Chat Lead)" },
+      { phase: "Phase 3: AI flow", name: "Build simple intent detection", priority: "high", status: "todo", assignee: "Member 2 (AI / Chat Lead)" },
+      { phase: "Phase 3: AI flow", name: "Build AI response templates", priority: "high", status: "todo", assignee: "Member 2 (AI / Chat Lead)" },
+      { phase: "Phase 3: AI flow", name: "Add financial health score", priority: "medium", status: "todo", assignee: "Member 3 (Backend Lead)" },
+      { phase: "Phase 3: AI flow", name: "Add savings recommendation", priority: "medium", status: "todo", assignee: "Member 2 (AI / Chat Lead)" },
+
+      // Phase 4: Integration
+      { phase: "Phase 4: Integration", name: "Build transfer confirmation flow", priority: "high", status: "todo", assignee: "Member 2 + 3" },
+
+      // Phase 5: Polish and demo
+      { phase: "Phase 5: Polish and demo", name: "UI polish", priority: "medium", status: "todo", assignee: "Member 4 (UX / Product Lead)" },
+      { phase: "Phase 5: Polish and demo", name: "Presentation slides", priority: "high", status: "todo", assignee: "Member 4 (UX / Product Lead)" },
+      { phase: "Phase 5: Polish and demo", name: "Demo script", priority: "high", status: "todo", assignee: "Member 4 + 5" },
+      { phase: "Phase 5: Polish and demo", name: "Testing and bug fixing", priority: "high", status: "todo", assignee: "Member 5 (QA / Integration Lead)" },
+      { phase: "Phase 5: Polish and demo", name: "Practice final demo", priority: "high", status: "todo", assignee: "All" }
+    ];
+
+    // ═══════════════ STATE ═══════════════
+    let tasks = [];
+    let currentFilter = 'all';
+    let editingIndex = null;
+    let isAddMode = false;
+
+    // ═══════════════ PERSISTENCE ═══════════════
+    function loadTasks() {
+      const saved = localStorage.getItem('siraj-execution-tasks');
+      if (saved) {
+        try { tasks = JSON.parse(saved); } catch (e) { tasks = [...DEFAULT_TASKS]; }
+      } else {
+        tasks = [...DEFAULT_TASKS];
+      }
+    }
+
+    function saveTasks() {
+      localStorage.setItem('siraj-execution-tasks', JSON.stringify(tasks));
+    }
+
+    // ═══════════════ TAB SWITCHING ═══════════════
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+
+      if (tabId === 'dashboard') updateDashboard();
+      if (tabId === 'tasks') renderTasks();
+    }
+
+    // ═══════════════ TASK RENDERING ═══════════════
+    function getFilteredTasks() {
+      return tasks.map((t, i) => ({ ...t, _idx: i })).filter(t => {
+        if (currentFilter === 'all') return true;
+        if (currentFilter === 'todo') return t.status === 'todo';
+        if (currentFilter === 'in-progress') return t.status === 'in-progress';
+        if (currentFilter === 'done') return t.status === 'done';
+        if (currentFilter === 'high') return t.priority === 'high';
+        if (currentFilter === 'medium') return t.priority === 'medium';
+        if (currentFilter === 'unassigned') return !t.assignee;
+        return true;
+      });
+    }
+
+    function renderTasks() {
+      const filtered = getFilteredTasks();
+      const grouped = {};
+      filtered.forEach(t => {
+        if (!grouped[t.phase]) grouped[t.phase] = [];
+        grouped[t.phase].push(t);
+      });
+
+      let html = '';
+      const phases = [
+        "Phase 1: Setup and planning",
+        "Phase 2: Core prototype",
+        "Phase 3: AI flow",
+        "Phase 4: Integration",
+        "Phase 5: Polish and demo"
+      ];
+
+      phases.forEach(phase => {
+        const phaseTasks = grouped[phase];
+        if (!phaseTasks || phaseTasks.length === 0) return;
+
+        const doneCount = phaseTasks.filter(t => t.status === 'done').length;
+        html += `<div class="phase-header">
+      <span class="phase-name">${phase}</span>
+      <span class="phase-count">${doneCount}/${phaseTasks.length}</span>
+    </div>`;
+
+        phaseTasks.forEach(t => {
+          const statusLabel = t.status === 'todo' ? 'To Do' : t.status === 'in-progress' ? 'In Progress' : 'Done';
+          const priorityLabel = t.priority === 'high' ? 'Must Have' : t.priority === 'medium' ? 'Should Have' : 'Nice to Have';
+          html += `<div class="task-row">
+        <input type="checkbox" class="task-checkbox" ${t.status === 'done' ? 'checked' : ''} onchange="toggleTask(${t._idx})">
+        <div>
+          <div class="task-name ${t.status === 'done' ? 'done' : ''}">${t.name}</div>
+        </div>
+        <span class="priority-badge priority-${t.priority}">${priorityLabel}</span>
+        <span class="assignee-badge ${t.assignee ? 'assignee-set' : 'assignee-unset'}">${t.assignee || 'Unassigned'}</span>
+        <span class="status-badge status-${t.status}">${statusLabel}</span>
+        <button class="edit-btn" onclick="openEditModal(${t._idx})">✏️</button>
+      </div>`;
+        });
+      });
+
+      if (filtered.length === 0) {
+        html = `<div style="text-align:center; padding:3rem; color:var(--text-muted);">
+      <div style="font-size:2rem; margin-bottom:0.5rem;">📋</div>
+      No tasks match the current filter.
+    </div>`;
+      }
+
+      document.getElementById('tasksContainer').innerHTML = html;
+      updateSummary();
+    }
+
+    function toggleTask(idx) {
+      tasks[idx].status = tasks[idx].status === 'done' ? 'todo' : 'done';
+      saveTasks();
+      renderTasks();
+    }
+
+    function filterTasks(filter, btn) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTasks();
+    }
+
+    function updateSummary() {
+      const total = tasks.length;
+      const done = tasks.filter(t => t.status === 'done').length;
+      const ip = tasks.filter(t => t.status === 'in-progress').length;
+      const unassigned = tasks.filter(t => !t.assignee).length;
+
+      document.getElementById('totalTasks').textContent = total;
+      document.getElementById('completedTasks').textContent = done;
+      document.getElementById('inProgressTasks').textContent = ip;
+      document.getElementById('unassignedTasks').textContent = unassigned;
+    }
+
+    // ═══════════════ MODAL ═══════════════
+    function openEditModal(idx) {
+      isAddMode = false;
+      editingIndex = idx;
+      const t = tasks[idx];
+      document.getElementById('modalTitle').textContent = 'Edit Task';
+      document.getElementById('modalTaskName').value = t.name;
+      document.getElementById('modalPhase').value = t.phase || 'Phase 1: Setup and planning';
+      document.getElementById('modalAssignee').value = t.assignee || '';
+      document.getElementById('modalStatus').value = t.status;
+      document.getElementById('modalPriority').value = t.priority;
+      document.getElementById('editModal').classList.add('show');
+    }
+
+    function openAddModal() {
+      isAddMode = true;
+      editingIndex = null;
+      document.getElementById('modalTitle').textContent = 'Add New Task';
+      document.getElementById('modalTaskName').value = '';
+      document.getElementById('modalPhase').value = 'Phase 1: Setup and planning';
+      document.getElementById('modalAssignee').value = '';
+      document.getElementById('modalStatus').value = 'todo';
+      document.getElementById('modalPriority').value = 'medium';
+      document.getElementById('editModal').classList.add('show');
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').classList.remove('show');
+    }
+
+    function saveModal() {
+      const name = document.getElementById('modalTaskName').value.trim();
+      const phase = document.getElementById('modalPhase').value;
+      const assignee = document.getElementById('modalAssignee').value;
+      const status = document.getElementById('modalStatus').value;
+      const priority = document.getElementById('modalPriority').value;
+
+      if (!name) return;
+
+      if (isAddMode) {
+        tasks.push({
+          phase,
+          name,
+          priority,
+          status,
+          assignee
+        });
+      } else if (editingIndex !== null) {
+        tasks[editingIndex].name = name;
+        tasks[editingIndex].phase = phase;
+        tasks[editingIndex].assignee = assignee;
+        tasks[editingIndex].status = status;
+        tasks[editingIndex].priority = priority;
+      }
+
+      saveTasks();
+      renderTasks();
+      closeModal();
+    }
+
+    // ═══════════════ DASHBOARD ═══════════════
+    function updateDashboard() {
+      const total = tasks.length;
+      const done = tasks.filter(t => t.status === 'done').length;
+      const ip = tasks.filter(t => t.status === 'in-progress').length;
+      const todo = total - done - ip;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      // KPIs
+      document.getElementById('kpiCompletion').textContent = pct + '%';
+      document.getElementById('kpiOnTrack').textContent = done + '/' + total;
+
+      const phases = [
+        "Phase 1: Setup and planning",
+        "Phase 2: Core prototype",
+        "Phase 3: AI flow",
+        "Phase 4: Integration",
+        "Phase 5: Polish and demo"
+      ];
+      const phasesDone = phases.filter(p => {
+        const pt = tasks.filter(t => t.phase === p);
+        return pt.length > 0 && pt.every(t => t.status === 'done');
+      }).length;
+      document.getElementById('kpiPhases').textContent = phasesDone + '/' + phases.length;
+      document.getElementById('kpiVelocity').textContent = total > 0 ? Math.round(total / phases.length) : 0;
+
+      // Health indicator
+      const hi = document.getElementById('healthIndicator');
+      const ht = document.getElementById('healthText');
+      hi.className = 'health-indicator';
+      if (pct >= 80) { hi.classList.add('health-good'); ht.textContent = 'On Track'; }
+      else if (pct >= 30) { hi.classList.add('health-warning'); ht.textContent = 'In Progress'; }
+      else { hi.classList.add('health-danger'); ht.textContent = 'Getting Started'; }
+
+      // Donut chart
+      const donut = document.getElementById('donutChart');
+      const doneP = total > 0 ? (done / total * 100) : 0;
+      const ipP = total > 0 ? (ip / total * 100) : 0;
+      const todoP = 100 - doneP - ipP;
+      donut.style.background = `conic-gradient(
+    #00966C 0% ${doneP}%,
+    #8785D2 ${doneP}% ${doneP + ipP}%,
+    #E2E8F0 ${doneP + ipP}% 100%
+  )`;
+      donut.innerHTML = `<div class="donut-center">
+    <div class="donut-center-value">${pct}%</div>
+    <div class="donut-center-label">Complete</div>
+  </div>`;
+
+      // Priority chart
+      const high = tasks.filter(t => t.priority === 'high').length;
+      const med = tasks.filter(t => t.priority === 'medium').length;
+      const low = tasks.filter(t => t.priority === 'low').length;
+      const maxP = Math.max(high, med, low, 1);
+      document.getElementById('priorityChart').innerHTML = `
+    <div class="bar-item">
+      <div class="bar-label">🔴 Must Have</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${high / maxP * 100}%; background:var(--danger);"></div></div>
+      <div class="bar-value">${high}</div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label">🟡 Should Have</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${med / maxP * 100}%; background:var(--warning);"></div></div>
+      <div class="bar-value">${med}</div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label">🟢 Nice to Have</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${low / maxP * 100}%; background:var(--success);"></div></div>
+      <div class="bar-value">${low}</div>
+    </div>
+  `;
+
+      // Phase progress
+      let phaseHTML = '';
+      phases.forEach(p => {
+        const pt = tasks.filter(t => t.phase === p);
+        const pd = pt.filter(t => t.status === 'done').length;
+        const pp = pt.length > 0 ? Math.round(pd / pt.length * 100) : 0;
+        phaseHTML += `<div class="phase-progress-item">
+      <div class="phase-progress-header">
+        <div class="phase-progress-name">${p}</div>
+        <div class="phase-progress-pct">${pp}%</div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pp}%"></div></div>
+    </div>`;
+      });
+      document.getElementById('phaseProgress').innerHTML = phaseHTML;
+
+      // Milestones
+      const milestones = [
+        { name: 'Git repository & branches created', status: tasks.filter(t => t.name === 'Create project repo and branches' && t.status === 'done').length > 0 ? 'complete' : 'active' },
+        { name: 'Mock financial transactions set up', status: tasks.filter(t => t.name === 'Create mock financial data' && t.status === 'done').length > 0 ? 'complete' : 'pending' },
+        { name: 'RTL layout, dashboard cards, & charts functional', status: phasesDone >= 2 ? 'complete' : 'pending' },
+        { name: 'Siraj chatbot UI & simple intent response functional', status: phasesDone >= 3 ? 'complete' : 'pending' },
+        { name: 'Transfer confirmation integrated & tested', status: phasesDone >= 4 ? 'complete' : 'pending' },
+        { name: 'Final UI polished, demo practiced, and presentation ready', status: phasesDone >= 5 ? 'complete' : 'pending' },
+      ];
+
+      let msHTML = '';
+      milestones.forEach(m => {
+        const icon = m.status === 'complete' ? '✓' : m.status === 'active' ? '◉' : '○';
+        msHTML += `<div class="milestone-item">
+      <div class="milestone-status milestone-${m.status}">${icon}</div>
+      <div class="milestone-info">
+        <div class="milestone-name">${m.name}</div>
+      </div>
+    </div>`;
+      });
+      document.getElementById('milestoneList').innerHTML = msHTML;
+    }
+
+    // ═══════════════ INIT ═══════════════
+    loadTasks();
+    renderTasks();
+  </script>
+
+</body>
+
+</html>

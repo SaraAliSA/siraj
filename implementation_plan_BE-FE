@@ -1,0 +1,142 @@
+# Siraj (سراج) — Parallel Implementation Plan & Architecture (Hackathon MVP)
+
+This document outlines the parallelized architecture and implementation plan for building **Siraj (سراج)**, a smart financial assistant. The plan is structured into three parts:
+1. **Frontend (FE) Implementation** (with mock data fallbacks for independent development)
+2. **Backend (BE) & AI Agent Implementation**
+3. **Integration Phase**
+
+---
+
+## 🏗️ 1. Parallel Development Architecture
+
+To support parallel development, the frontend and backend are decoupled using a clear interface contract. The frontend client will contain a toggle to switch between a local Mock API client and the actual HTTP/SSE backend client.
+
+```mermaid
+graph TD
+    subgraph Frontend [React Frontend - RTL Cairo Font]
+        UI[UI Components & Pages] --> ClientAdapter{Client Adapter}
+        ClientAdapter -->|Mock Toggle = True| MockAPI[Mock Client / In-memory Data]
+        ClientAdapter -->|Mock Toggle = False| RealAPI[Axios API Client / EventSource]
+    end
+
+    subgraph Backend [FastAPI Backend]
+        RealAPI -->|REST / SSE HTTP| Router[FastAPI Routers]
+        Router --> ORM[SQLAlchemy / SQLModel]
+        ORM --> DB[(SQLite DB)]
+        Router --> AI[Gemini AI Agent]
+        AI <-->|Function Calling| Tools[15 Financial Tools]
+        Tools --> ORM
+    end
+```
+
+---
+
+## 🎨 Part 1: Frontend (FE) Implementation Plan
+
+The Frontend is built using **React** (via Vite), **Vanilla CSS** (matching the premium dark navy/copper theme), and **Recharts**. It is structured to run fully standalone with simulated delays to mock server interactions.
+
+### Phase FE.1: Base Structure & Design Tokens
+1. **Initialize Project**: Set up React + Vite with dynamic Routing (`/dashboard`, `/transactions`, `/chat`, `/financing`, `/investment`, `/savings`, `/goals`, `/alerts`, `/reports`, `/settings`).
+2. **Design Tokens (`index.css`)**:
+   - Establish colors: Deep Navy (`#0d1117` and `#1a1f4e` for cards/panels), Accent Copper (`#c17a3a`), Success Emerald (`#2e7d32`), Warning Gold (`#d32f2f`), Base Light Cream (`#f8f6f1`).
+   - Font: Import and apply `Cairo` or `IBM Plex Sans Arabic` globally.
+   - Layout: Right sidebar navigation (RTL layout) with collapsible mobile menu.
+
+### Phase FE.2: Component & Page Shells (with Mock Client)
+1. **Develop `MockAPIClient`**: Implement a module that simulates all backend endpoints (defined in the contract) with 3-year mock data records for **Sara**.
+2. **Dashboard Page**:
+   - Dynamic cards showing: Current Balance (إجمالي الرصيد), Monthly Income (إجمالي الدخل), Monthly Expenses (إجمالي المصروفات), Net Savings (صافي الادخار), Savings Rate (معدل الادخار).
+   - Recharts category donut chart (Housing, Groceries, Restaurants, Transport, Bills, Entertainment, Health, Other).
+   - Horizontal bar chart of top 5 expenses.
+   - Financial Health Score gauge (0-100) with visual indicator.
+   - Interactive quick-action buttons.
+3. **Siraj AI Assistant Page**:
+   - Full chat interface matching the Saudi style.
+   - Message bubbles with tool indicators (e.g., "جاري سحب كشف الحساب...").
+   - Quick action chips ("وين راحت فلوسي؟", "أبي حصالة", "درجة صحتي المالية").
+4. **Financing, Investment, & Savings Pages**:
+   - Financing request form and status tracker list (Pending, Under Review, Approved).
+   - Investment opportunity catalog (Low, Medium, High risk) and recommendation cards.
+   - Savings goals progress card and plan builder modal.
+5. **Goals & Alerts Pages**:
+   - Pre-loaded templates for Hajj (حج), Umrah (عمرة), Marriage (زواج), Travel (سفر), Ramadan (رمضان), Eid (عيد).
+   - Alert logs showing budget warnings and spending spikes.
+
+---
+
+## ⚙️ Part 2: Backend (BE) & AI Agent Implementation Plan
+
+The Backend is built using **FastAPI** and **SQLAlchemy** (using SQLite as a fast, zero-setup file database for the MVP).
+
+### Phase BE.1: Database Schema & Seeding (Sara's 3-Year Profile)
+1. **Database Tables**: Create definitions for `User`, `Transaction`, `Budget`, `SavingsGoal`, `FinancingRequest`, `InvestmentRequest`, `Alert`, `FinancialGoal`, `ChatSession`, and `ChatMessage`.
+2. **Seeding Engine (`seed.py`)**: Generate a rich, realistic dataset for **Sara** covering exactly **3 years** (36 months).
+   - **Income**: Monthly salary of **15,000 SAR** deposited on the **27th** of every Gregorian month. Occasional annual bonus of **10,000 SAR** in December.
+   - **Fixed Expenses (Monthly)**:
+     - Rent/Housing: **4,000 SAR** (paid on the 1st).
+     - Electricity & Water: **400 - 800 SAR** (higher in summer: Jun - Aug).
+     - Telecom/Internet: **350 SAR** (fixed monthly).
+     - Subscriptions: Netflix (**55 SAR**), Gym (**250 SAR**), Spotify (**25 SAR**).
+   - **Variable Expenses (Weekly/Daily)**:
+     - Groceries: **1,200 SAR** monthly (spread across weekly shopping).
+     - Restaurants & Cafes: Peak spending on weekends (Thursday/Friday), average **1,500 SAR** monthly.
+     - Transport/Fuel: **500 SAR** monthly.
+   - **Seasonal Spends**:
+     - **Ramadan**: Increased spending on groceries (+50%) and family gatherings (+600 SAR).
+     - **Eid Al-Fitr / Eid Al-Adha**: Gifts (عيدية) of **1,500 SAR** and new clothes of **1,200 SAR**.
+     - **Summer Vacation**: Large transaction block of **8,000 - 12,000 SAR** every July for travel bookings.
+     - **Back-to-School**: **1,500 SAR** every August/September.
+   - **Savings**: Monthly transfer of **2,000 - 3,000 SAR** to savings plans when variable spend is low.
+
+### Phase BE.2: REST API Routes
+1. **Auth Route**: Simple signup and login issuing a JWT bearer token.
+2. **Dashboard aggregation service**: Fetch and calculate monthly summaries, category totals, and financial indicators.
+3. **Crud Endpoints**:
+   - Transactions, Budgets, Savings plans, Financing applications, Investment opportunities.
+4. **Health Score Engine**: Calculate score (0-100) based on savings rate, budget adherence, and subscription use.
+
+### Phase BE.3: Siraj AI Agent System
+1. **System Prompt Design**:
+   - Identity: Friendly, Saudi-dialect, culturally aware, compliant with Islamic finance.
+   - Guardrails: Refuse speculative investments, no loans, suggest certified planners.
+2. **Tool Registrations**: Set up the 15 functional calls (Gemini SDK function declarations) to read and modify database records.
+3. **Agentic Loop**: Implement the tool execution loop where Gemini requests database actions, the backend executes them, and feeds the results back to Gemini.
+4. **SSE Chat Server**: Setup streaming server endpoint `/api/v1/chat/sessions/{id}/messages` to stream responses token-by-token.
+
+---
+
+## 🔄 Part 3: Integration Plan
+
+Once FE and BE are complete, they are integrated by configuring the frontend to talk to the API.
+
+```mermaid
+sequenceDiagram
+    participant FE as React Frontend
+    participant BE as FastAPI Backend
+    participant GEM as Google Gemini API
+
+    Note over FE,BE: Integration Test Phase
+    FE->>FE: Toggle MOCK_API = false
+    FE->>BE: POST /api/v1/auth/login
+    BE-->>FE: JWT Token
+
+    FE->>BE: GET /api/v1/dashboard/overview (with Auth Header)
+    BE-->>FE: Return aggregated 3-year data
+
+    Note over FE,GEM: AI Agent Integration
+    FE->>BE: POST /api/v1/chat/sessions/1/messages ("أضف 50 ريال قهوة")
+    BE->>GEM: System Prompt + Context + Message
+    GEM-->>BE: Tool Call: add_transaction(amount=50, category='مطاعم ومقاهي')
+    BE->>BE: Insert to SQLite
+    BE->>GEM: Tool Result: Success
+    GEM-->>BE: Text: "أبشر، أضفت 50 ريال لمصروفات القهوة."
+    BE-->>FE: Stream: "أبشر، أضفت..." (SSE)
+    FE->>FE: Refresh dashboard charts automatically
+```
+
+### Integration Steps
+1. **CORS Configuration**: Configure FastAPI to allow connections from the Vite dev server port.
+2. **Environment Synchronization**: Point the frontend `.env` to the FastAPI backend host URL.
+3. **Authentication Handshake**: Replace the Mock auth hook with local storage storage of JWT and Axios interceptors to attach `Authorization: Bearer <token>` to all backend requests.
+4. **Chat Stream Hook**: Connect the chat bubble UI to a native JS `EventSource` or `fetch-reader` stream targeting the FastAPI SSE endpoint to display tokens in real-time.
+5. **Event-Driven UI Refresh**: Implement a dashboard refresh mechanism that re-triggers data fetching whenever Siraj executes a data-altering tool (such as adding transactions or setting budgets).
