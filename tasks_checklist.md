@@ -1,26 +1,26 @@
 # Implementation Checklist
 
 ## BE (Backend)
-- [ ] **Project Setup & Configuration**
-  - [ ] Initialize Python environment, `requirements.txt`, `.env` configuration file
-  - [ ] Set up FastAPI base application with CORS settings
-- [ ] **Database & ORM Models**
-  - [ ] Implement database connection engine & session factory (`database.py`)
-  - [ ] Create SQLAlchemy ORM models for all 10 tables:
-    - [ ] `User`, `Transaction`, `Budget`, `SavingsGoal`
-    - [ ] `FinancingRequest`, `InvestmentRequest`, `Alert`, `FinancialGoal`
-    - [ ] `ChatSession`, `ChatMessage`
-- [ ] **Pydantic Schemas**
-  - [ ] Create request and response validation schemas for all models
-- [ ] **Authentication & Security**
-  - [ ] Implement user registration and login endpoints (`/auth/register`, `/auth/login`)
-  - [ ] Set up JWT token validation and password hashing/security services
-- [ ] **Core Business Services**
-  - [ ] Develop financial metrics and dashboard services (`/dashboard/overview`, `/dashboard/category-breakdown`)
-  - [ ] Create financial health score logic (`health_score.py`)
-  - [ ] Implement smart alert engine check and endpoints (`alert_engine.py`, `/alerts`)
-- [ ] **Database Seeding**
-  - [ ] Build seeder script (`seed.py`) with ~120 realistic transaction records for "سارة القرني"
+- [x] **Project Setup & Configuration**
+  - [x] Initialize Python environment, `requirements.txt`, `.env` configuration file
+  - [x] Set up FastAPI base application with CORS settings
+- [x] **Database & ORM Models**
+  - [x] Implement database connection engine & session factory (`database.py`)
+  - [x] Create SQLAlchemy ORM models for all 10 tables:
+    - [x] `User`, `Transaction`, `Budget`, `SavingsGoal`
+    - [x] `FinancingRequest`, `InvestmentRequest`, `Alert`, `FinancialGoal`
+    - [x] `ChatSession`, `ChatMessage`
+- [x] **Pydantic Schemas**
+  - [x] Create request and response validation schemas for all models
+- [x] **Authentication & Security**
+  - [x] Implement user registration and login endpoints (`/auth/register`, `/auth/login`)
+  - [x] Set up JWT token validation and password hashing/security services
+- [x] **Core Business Services**
+  - [x] Develop financial metrics and dashboard services (`/dashboard/overview`, `/dashboard/category-breakdown`)
+  - [x] Create financial health score logic (`health_score.py`)
+  - [x] Implement smart alert engine check and endpoints (`alert_engine.py`, `/alerts`)
+- [x] **Database Seeding**
+  - [x] Build seeder script (`seed.py`) with ~120 realistic transaction records for "سارة القرني"
 
 ## FR (Frontend/React)
 - [ ] **Project Init & Configuration**
