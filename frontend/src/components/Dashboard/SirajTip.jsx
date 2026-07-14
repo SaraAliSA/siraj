@@ -12,9 +12,13 @@ export default function SirajTip() {
       <p className="tip-text">
         لاحظت إن مصروفات الترفيه زادت 15% هذا الشهر. لو تبي، أقدر أقترح لك خطة ادخار بسيطة توازن ميزانيتك.
       </p>
-      <Link to="/siraj-ai" className="tip-link">
-        اسأل سراج <ChevronLeft size={14} />
-      </Link>
+     <Link
+  to="/siraj-ai"
+  state={{ initialPrompt: 'اقترح لي خطة ادخار بسيطة توازن ميزانيتي' }}
+  className="tip-link"
+>
+  اسأل سراج <ChevronLeft size={14} />
+</Link>
     </div>
   );
 }

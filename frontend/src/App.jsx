@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { AlertsProvider } from './context/AlertsContext';
 import AppLayout from './components/Layout/AppLayout';
+import { SavingsProvider } from './context/SavingsContext';
 
 // Pages
 import LoginPage from './pages/LoginPage';
@@ -22,10 +23,11 @@ import { GoalsProvider } from './context/GoalsContext';
 function App() {
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <AlertsProvider>
-          <GoalsProvider>
-           <BrowserRouter>
+  <AuthProvider>
+    <AlertsProvider>
+      <GoalsProvider>
+        <SavingsProvider>
+          <BrowserRouter>
             <Routes>
               {/* Public Login Route */}
               <Route path="/login" element={<LoginPage />} />
@@ -47,11 +49,12 @@ function App() {
               {/* Catch-all Redirect */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-           </BrowserRouter>
-          </GoalsProvider>
-        </AlertsProvider>
-      </AuthProvider>
-    </ThemeProvider>
+             </BrowserRouter>
+        </SavingsProvider>
+      </GoalsProvider>
+    </AlertsProvider>
+  </AuthProvider>
+</ThemeProvider>
   );
 }
 

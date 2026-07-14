@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import { Plus, FileText, CreditCard, ArrowLeftRight, PiggyBank, TrendingUp, TrendingDown, Wallet, Percent, ChevronUp, ChevronDown, Eye, ChevronRight, Sparkles } from 'lucide-react';import useAuth from '../hooks/useAuth';
+import { Plus, FileText, CreditCard, ArrowLeftRight, Coins, TrendingUp, TrendingDown, Wallet, Percent, ChevronUp, ChevronDown, Eye, ChevronRight, Sparkles ,EyeOff} from 'lucide-react';import useAuth from '../hooks/useAuth';
 import TopExpensesBar from '../components/Dashboard/TopExpensesBar.jsx';
 import FinancialAnalysis from '../components/Dashboard/FinancialAnalysis.jsx';
 import SirajTip from '../components/Dashboard/SirajTip.jsx';
 import RecentTransactions from '../components/Dashboard/RecentTransactions.jsx';
 import DashboardPreviewCards from '../components/Dashboard/DashboardPreviewCards.jsx';
+import React, { useState } from 'react';
 
 const quickActions = [
   { label: 'إضافة معاملة', icon: Plus },
@@ -13,10 +14,11 @@ const quickActions = [
   { label: 'تحويل', icon: ArrowLeftRight },
 ];
 
+
 const stats = [
   { label: 'الدخل الشهري', value: '18,540', icon: Wallet, trend: '12%', up: true, history: [15200, 16000, 16500, 17200, 17800, 18540] },
   { label: 'المصروفات', value: '11,280', icon: TrendingDown, trend: '4%', up: false, history: [9800, 10200, 9500, 10800, 11500, 11280] },
-  { label: 'المدخرات', value: '9,320', icon: PiggyBank, trend: '6%', up: true, history: [7200, 7600, 8100, 8500, 8900, 9320] },
+  { label: 'المدخرات', value: '9,320', icon: Coins, trend: '6%', up: true, history: [7200, 7600, 8100, 8500, 8900, 9320] },
   { label: 'نسبة الادخار', value: '33', unit: '%', icon: Percent, trend: '2%', up: true, history: [28, 29, 30, 31, 32, 33] },
 ];
 
@@ -52,6 +54,7 @@ function Sparkline({ data, color }) {
 export default function DashboardPage() {
   const { user } = useAuth();
   const displayName = user?.full_name || 'محمد العنزي';
+  const [hideBalances, setHideBalances] = useState(false);
 
   return (
     <div className="dashboard-container">
@@ -59,16 +62,16 @@ export default function DashboardPage() {
       <div className="dashboard-hero">
         <div className="dashboard-hero-top">
                     <p className="balance-label">إجمالي الرصيد</p>
-<button className="dashboard-eye-btn">
-            <Eye size={16} />
+          <button className="dashboard-eye-btn" onClick={() => setHideBalances(!hideBalances)}>
+            {hideBalances ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         </div>
 
         <p className="dashboard-greeting-text">{getGreeting()}، {displayName.split(' ')[0]} 👋</p>
 
-        <p className="balance-value">
-          42,860 <span className="balance-unit">ر.س</span>
-        </p>
+            <p className="balance-value">
+        {hideBalances ? '••••••' : '42,860'} <span className="balance-unit">ر.س</span>
+      </p>
 
         <div className="dashboard-hero-bottom">
           <Link to="/transactions" className="dashboard-details-link">
@@ -119,8 +122,8 @@ export default function DashboardPage() {
       <Sparkline data={history} color={up ? '#16a34a' : '#dc2626'} />
     </div>
     <p className="stat-label">{label}</p>
-    <p className="stat-value">
-      {value} <span className="stat-unit">{unit || 'ر.س'}</span>
+      <p className="stat-value">
+      {hideBalances ? '••••' : value} <span className="stat-unit">{unit || 'ر.س'}</span>
     </p>
     <span className={`stat-trend ${up ? 'up' : 'down'}`}>
       {trend} {up ? <ChevronUp size={12} /> : <ChevronDown size={12} />}

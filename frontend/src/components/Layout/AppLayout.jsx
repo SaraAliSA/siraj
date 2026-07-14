@@ -41,7 +41,9 @@ const AppLayout = () => {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        overflow: 'hidden'
+        overflow: 'hidden',
+  paddingTop: 'env(safe-area-inset-top, 0px)'
+
       }}>
         <TopBar />
         <main className="page-content-wrapper" style={{

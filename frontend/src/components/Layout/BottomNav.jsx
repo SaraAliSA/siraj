@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { House, ArrowLeftRight, Sparkles, HandCoins, TrendingUp, PiggyBank, Target, Bell, FileText, Settings } from 'lucide-react';
 import { Grid2x2 } from 'lucide-react';
-
+import { House, ArrowLeftRight, Sparkles, HandCoins, TrendingUp, Coins, Target, Bell, FileText, Settings } from 'lucide-react';
 const BottomNav = () => {
   const [showMore, setShowMore] = useState(false);
   const navigate = useNavigate();
@@ -16,7 +15,7 @@ const BottomNav = () => {
 
  const overflowItems = [
   { to: '/investment', label: 'الاستثمار', icon: TrendingUp },
-  { to: '/savings', label: 'الادخار', icon: PiggyBank },
+  { to: '/savings', label: 'الادخار', icon: Coins },
   { to: '/goals', label: 'الأهداف', icon: Target },
   { to: '/alerts', label: 'التنبيهات', icon: Bell },
   { to: '/reports', label: 'التقارير', icon: FileText },

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const data = [
   { name: 'سكن', amount: 4200, max: 4200 },
@@ -11,10 +12,10 @@ const data = [
 export default function TopExpensesBar() {
   return (
     <div className="chart-card">
-      <div className="section-header">
-              <h2 className="section-title">أعلى 5 مصروفات</h2>
-  <span className="section-view-all">التفاصيل</span>
-      </div>
+    <div className="section-header"> 
+    <h2 className="section-title">أعلى 5 مصروفات</h2>
+  < Link to="/transactions" className="section-view-all">التفاصيل</Link>
+</div>
       <div className="expense-bar-list">
         {data.map((item) => (
           <div key={item.name} className="expense-bar-row">

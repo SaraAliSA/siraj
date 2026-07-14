@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import { Plus, X, PartyPopper, Calendar } from 'lucide-react';
 
-const initialPlans = [
-  { id: 1, name: 'رحلة العمرة', target: 20000, saved: 13600, monthly: 1200, months: 6, nextDate: '1 أغسطس' },
-  { id: 2, name: 'سيارة جديدة', target: 40000, saved: 12500, monthly: 2200, months: 18, nextDate: '5 أغسطس' },
-  { id: 3, name: 'صندوق الطوارئ', target: 15000, saved: 15000, monthly: 500, months: 0, nextDate: null },
-];
+
+import useSavings from '../hooks/useSavings';
 
 export default function SavingsPage() {
-  const [plans, setPlans] = useState(initialPlans);
+  const { plans, setPlans } = useSavings();
   const [showForm, setShowForm] = useState(false);
   const [celebrate, setCelebrate] = useState(null);
   const [name, setName] = useState('');

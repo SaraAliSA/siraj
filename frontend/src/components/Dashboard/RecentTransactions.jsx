@@ -1,5 +1,6 @@
 import React from 'react';
 import { ShoppingBag, Zap, Car, Utensils, ArrowDownLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const transactions = [
   { name: 'مطعم البيك', amount: -85, date: 'اليوم', icon: Utensils },
@@ -14,8 +15,7 @@ export default function RecentTransactions() {
     <div className="chart-card">
   <div className="section-header" style={{ marginTop: 0, marginBottom: 10 }}>
     <h2 className="chart-title" style={{ marginBottom: 0 }}>آخر المعاملات</h2>
-    <span className="section-view-all">عرض الكل</span>
-  </div>
+<Link to="/transactions" className="section-view-all">عرض الكل</Link>  </div>
 
   <div className="transaction-list">
         {transactions.map((t, i) => (
