@@ -1,0 +1,438 @@
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+:root {
+  /* Light Theme Variables (Default) */
+  --primary-color: #1a1f4e;
+  --primary-rgb: 26, 31, 78;
+  --accent-color: #c17a3a;
+  --accent-rgb: 193, 122, 58;
+  --accent-hover: #a66226;
+  --bg-color: #f8f6f1;
+  --surface-color: #ffffff;
+  --surface-hover: #f1ede4;
+  --text-primary: #1a1f4e;
+  --text-secondary: #5c627a;
+  --text-muted: #8c92a6;
+  --border-color: #e6e3d8;
+  --success-color: #2e7d32;
+  --danger-color: #d32f2f;
+  --warning-color: #ed6c02;
+  --info-color: #0288d1;
+  --shadow: 0 8px 30px rgba(26, 31, 78, 0.04);
+  --shadow-lg: 0 16px 40px rgba(26, 31, 78, 0.08);
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+}
+
+/* Dark Theme Variables */
+html.dark {
+  --primary-color: #0d1117;
+  --primary-rgb: 13, 17, 23;
+  --accent-color: #d18d4f;
+  --accent-rgb: 209, 141, 79;
+  --accent-hover: #c17a3a;
+  --bg-color: #0b0e14;
+  --surface-color: #161b22;
+  --surface-hover: #21262d;
+  --text-primary: #f0f6fc;
+  --text-secondary: #8b949e;
+  --text-muted: #484f58;
+  --border-color: #30363d;
+  --success-color: #3fbc46;
+  --danger-color: #f85149;
+  --warning-color: #d29922;
+  --info-color: #58a6ff;
+  --shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  direction: rtl;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-sm);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color);
+}
+
+/* Utility Layouts */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-right: 280px; /* Width of Sidebar */
+  background-color: var(--bg-color);
+}
+
+@media (max-width: 992px) {
+  .main-content {
+    margin-right: 0;
+  }
+}
+
+.page-wrapper {
+  padding: 2rem;
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Typography & Headers */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+/* Premium Card Design */
+.card {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+  opacity: 0.8;
+}
+
+/* Dashboard Metrics Grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: var(--accent-color);
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--surface-hover);
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
+
+/* Forms */
+.form-group {
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-control {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  outline: none;
+  width: 100%;
+}
+
+.form-control:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(193, 122, 58, 0.15);
+}
+
+/* Lists & Tables */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background-color: var(--surface-color);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+}
+
+th {
+  background-color: rgba(var(--primary-rgb), 0.03);
+  padding: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  border-bottom: 2px solid var(--border-color);
+}
+
+td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover td {
+  background-color: rgba(var(--primary-rgb), 0.01);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.badge-success {
+  background-color: rgba(46, 125, 50, 0.1);
+  color: var(--success-color);
+}
+
+.badge-danger {
+  background-color: rgba(211, 47, 47, 0.1);
+  color: var(--danger-color);
+}
+
+.badge-warning {
+  background-color: rgba(237, 108, 2, 0.1);
+  color: var(--warning-color);
+}
+
+.badge-info {
+  background-color: rgba(2, 136, 209, 0.1);
+  color: var(--info-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+/* ==========================================
+   Universal Mobile-First Layout Rules
+   ========================================== */
+.main-content {
+  margin-right: 0 !important;
+  width: 100% !important;
+}
+
+.page-wrapper {
+  padding: 1.25rem !important;
+}
+
+/* Sidebar is drawer offscreen by default */
+aside {
+  right: -280px !important;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+aside.open {
+  right: 0 !important;
+}
+
+/* Grids default configuration */
+.metrics-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+  gap: 1rem !important;
+}
+
+.two-column-grid {
+  grid-template-columns: 1fr !important;
+  gap: 1.25rem !important;
+}
+
+.goals-grid {
+  grid-template-columns: 1fr !important;
+  gap: 1rem !important;
+}
+
+/* Toggle menu button display */
+.menu-toggle-btn {
+  display: flex !important;
+}
+
+.sidebar-close-btn {
+  display: block !important;
+}
+
+/* Click-away backdrop overlay */
+.sidebar-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 95;
+}
+
+/* Mobile-first buttons and tables styling */
+@media (max-width: 576px) {
+  .page-wrapper {
+    padding: 0.75rem !important;
+  }
+
+  .btn {
+    padding: 0.6rem 1rem !important;
+    font-size: 0.85rem !important;
+  }
+
+  table th, table td {
+    padding: 0.75rem 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .card {
+    padding: 1rem !important;
+  }
+  
+  .welcomeText {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* ==========================================
+   Desktop Smartphone Mockup Wrapping (Chrome Desktop)
+   ========================================== */
+@media (min-width: 993px) {
+  body {
+    background-color: #0b0e14; /* Elegant dark viewport background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 1.5rem 0;
+  }
+
+  #root {
+    width: 412px; /* iPhone 14 Pro width standard */
+    height: 844px; /* iPhone 14 Pro height standard */
+    border-radius: 40px;
+    border: 12px solid #21262d; /* Titanium smartphone frame */
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    background-color: var(--bg-color);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Make app container fit inside mock phone frame */
+  .app-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .main-content {
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow-y: auto !important;
+    flex: 1;
+  }
+
+  aside {
+    height: 100% !important;
+    position: absolute !important;
+    z-index: 105 !important;
+  }
+
+  .sidebar-backdrop {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
