@@ -194,6 +194,76 @@ async def generate_ai_plan(
     months = max(1, months_diff)
     required_monthly = remaining / months
     
+    try:
+        import json
+        from google import genai
+        from google.genai import types
+        from backend.app.config import settings
+        from backend.app.ai.context_builder import build_context
+        
+        if settings.GEMINI_API_KEY:
+            client = genai.Client(api_key=settings.GEMINI_API_KEY)
+            context = await build_context(current_user.id, db)
+            prompt = (
+                f"بناءً على الملف المالي للمستخدم التالي:\n"
+                f"{context}\n\n"
+                f"الهدف المالي المراد التخطيط له:\n"
+                f"- نوع الهدف: {goal.goal_type}\n"
+                f"- العنوان: {goal.title}\n"
+                f"- المبلغ المستهدف: {target} ر.س\n"
+                f"- المبلغ المدخر حالياً: {saved} ر.س\n"
+                f"- التاريخ المستهدف لتحقيق الهدف: {goal.target_date.isoformat()}\n"
+                f"- الأشهر المتبقية: {months} شهر\n"
+                f"- المبلغ الشهري المطلوب: {required_monthly:.2f} ر.س\n\n"
+                f"قم بتحليل البيانات أعلاه وصياغة خطة مالية مخصصة وعملية.\n"
+                f"يجب أن ترجع خطة تحتوي على:\n"
+                f"1. شهري مستهدف (monthly_target).\n"
+                f"2. 4 نصائح وتوصيات مخصصة (ai_recommendations) باللغة العربية (باللهجة السعودية البيضاء الودية) لتحقيق الهدف (مثلاً: نصائح لتقليل الإنفاق ببعض الفئات بناءً على تحليلك لمعاملاته، أو نصيحة استثمارية متوافقة مع الشريعة).\n"
+                f"3. قائمة بالمراحل أو الأهداف الفرعية (milestones) مثل 25%، 50%، 75%، 100% مع تحديد المبالغ وتحديد هل تحققت بناءً على المبلغ المدخر حالياً ({saved})."
+            )
+            
+            schema = {
+                "type": "OBJECT",
+                "properties": {
+                    "monthly_target": {"type": "NUMBER"},
+                    "ai_recommendations": {
+                        "type": "ARRAY",
+                        "items": {"type": "STRING"}
+                    },
+                    "milestones": {
+                        "type": "ARRAY",
+                        "items": {
+                            "type": "OBJECT",
+                            "properties": {
+                                "title": {"type": "STRING"},
+                                "amount": {"type": "NUMBER"},
+                                "achieved": {"type": "BOOLEAN"}
+                            },
+                            "required": ["title", "amount", "achieved"]
+                        }
+                    }
+                },
+                "required": ["monthly_target", "ai_recommendations", "milestones"]
+            }
+            
+            response = client.models.generate_content(
+                model='gemini-3.5-flash',
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=schema,
+                    temperature=0.3
+                )
+            )
+            if response.text:
+                plan_details = json.loads(response.text)
+                goal.plan_details = plan_details
+                await db.commit()
+                await db.refresh(goal)
+                return goal
+    except Exception as e:
+        print(f"Error generating dynamic goal plan: {e}")
+
     plan_details = {
         "monthly_target": round(required_monthly, 2),
         "ai_recommendations": [
@@ -215,3 +285,4 @@ async def generate_ai_plan(
     await db.commit()
     await db.refresh(goal)
     return goal
+

@@ -55,17 +55,17 @@
   - [ ] Set up global notification context (`AlertContext.jsx`) and connect to backend active alerts
 
 ## AI
-- [ ] **Prompt Engineering & System Prompt**
-  - [ ] Formulate multi-layered Arabic (Saudi dialect) system prompt containing personality, capabilities, and dynamic rules
-- [ ] **Gemini Tool Suite**
-  - [ ] Define the schema for 15 tools matching the 7 feature areas (e.g., `get_transactions`, `simulate_scenario`)
-- [ ] **Context Builder (RAG)**
-  - [ ] Write logic to build financial snapshots (balances, budgets, goals) to feed into the prompt context
-- [ ] **Agent Conversation Loop**
-  - [ ] Build the multi-turn execution flow resolving function calls automatically
-- [ ] **Streaming Chat Gateway**
-  - [ ] Integrate Server-Sent Events (SSE) router on FastAPI for real-time response generation
-  - [ ] Hook up frontend chat panel (`ChatPanel.jsx`, `MessageBubble.jsx`) to handle token-by-token streaming
+- [x] **Prompt Engineering & System Prompt**
+  - [x] Formulate multi-layered Arabic (Saudi dialect) system prompt containing personality, capabilities, and dynamic rules
+- [x] **Gemini Tool Suite**
+  - [x] Define the schema for 15 tools matching the 7 feature areas (e.g., `get_transactions`, `simulate_scenario`)
+- [x] **Context Builder (RAG)**
+  - [x] Write logic to build financial snapshots (balances, budgets, goals) to feed into the prompt context
+- [x] **Agent Conversation Loop**
+  - [x] Build the multi-turn execution flow resolving function calls automatically
+- [x] **Streaming Chat Gateway**
+  - [x] Integrate Server-Sent Events (SSE) router on FastAPI for real-time response generation
+  - [x] Hook up frontend chat panel (`ChatPanel.jsx`, `MessageBubble.jsx`) to handle token-by-token streaming
 
 ## Demo & Presentation
 - [ ] **Data Verification & Dry Run**

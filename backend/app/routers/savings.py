@@ -11,6 +11,7 @@ from backend.app.models.user import User
 from backend.app.models.savings import SavingsGoal
 from backend.app.schemas.savings import SavingsGoalCreate, SavingsGoalUpdate, SavingsGoalResponse, SavingsGoalProgressResponse
 from backend.app.services.auth_service import get_current_user
+from backend.app.services.alert_engine import check_goal_milestones
 
 router = APIRouter(prefix="/savings", tags=["Savings"])
 
@@ -40,6 +41,10 @@ async def create_savings_plan(
     db.add(new_plan)
     await db.commit()
     await db.refresh(new_plan)
+    try:
+        await check_goal_milestones(current_user.id, new_plan.id, db)
+    except Exception as e:
+        print(f"Error checking milestones: {e}")
     return new_plan
 
 @router.put("/plans/{plan_id}", response_model=SavingsGoalResponse)
@@ -70,6 +75,10 @@ async def update_savings_plan(
         
     await db.commit()
     await db.refresh(plan)
+    try:
+        await check_goal_milestones(current_user.id, plan.id, db)
+    except Exception as e:
+        print(f"Error checking milestones: {e}")
     return plan
 
 @router.get("/plans/{plan_id}/progress", response_model=SavingsGoalProgressResponse)

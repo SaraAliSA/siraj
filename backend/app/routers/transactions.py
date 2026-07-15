@@ -11,6 +11,7 @@ from backend.app.models.user import User
 from backend.app.models.transaction import Transaction
 from backend.app.schemas.transaction import TransactionCreate, TransactionResponse
 from backend.app.services.auth_service import get_current_user
+from backend.app.services.alert_engine import check_budget_breach, check_spending_spike
 
 router = APIRouter(prefix="/transactions", tags=["Transactions"])
 
@@ -61,6 +62,14 @@ async def create_transaction(
     db.add(new_txn)
     await db.commit()
     await db.refresh(new_txn)
+    
+    # Check for alerts in the background / inline
+    try:
+        await check_budget_breach(current_user.id, new_txn.category, db)
+        await check_spending_spike(current_user.id, new_txn, db)
+    except Exception as e:
+        print(f"Error checking alerts: {e}")
+        
     return new_txn
 
 @router.delete("/{transaction_id}", status_code=status.HTTP_204_NO_CONTENT)

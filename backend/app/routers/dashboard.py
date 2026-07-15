@@ -15,6 +15,10 @@ from backend.app.models.savings import SavingsGoal
 from backend.app.models.goal import FinancialGoal
 from backend.app.models.alert import Alert
 from backend.app.services.auth_service import get_current_user
+from backend.app.services.financial_service import (
+    get_financial_summary,
+    get_category_breakdown,
+)
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -34,54 +38,12 @@ async def get_overview(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    today = date.today()
-    start_of_month = date(today.year, today.month, 1)
-    
-    # Calculate Income this month
-    income_res = await db.execute(
-        select(func.sum(Transaction.amount)).where(
-            and_(
-                Transaction.user_id == current_user.id,
-                Transaction.type == "income",
-                Transaction.transaction_date >= start_of_month
-            )
-        )
-    )
-    total_income = float(income_res.scalar() or 0.0)
-    
-    # Calculate Expenses this month
-    expense_res = await db.execute(
-        select(func.sum(Transaction.amount)).where(
-            and_(
-                Transaction.user_id == current_user.id,
-                Transaction.type == "expense",
-                Transaction.transaction_date >= start_of_month
-            )
-        )
-    )
-    total_expense = float(expense_res.scalar() or 0.0)
-    
-    # Calculate Total Savings
-    savings_res = await db.execute(
-        select(func.sum(SavingsGoal.current_amount)).where(
-            SavingsGoal.user_id == current_user.id
-        )
-    )
-    total_savings = float(savings_res.scalar() or 0.0)
-    
-    # Calculate Savings Rate
-    # (Income - Expense) / Income
-    savings_rate = 0.0
-    if total_income > 0:
-        savings_rate = round(((total_income - total_expense) / total_income) * 100, 2)
-        if savings_rate < 0:
-            savings_rate = 0.0
-            
+    summary = await get_financial_summary(current_user.id, db)
     return {
-        "total_income": total_income,
-        "total_expense": total_expense,
-        "total_savings": total_savings,
-        "savings_rate": savings_rate,
+        "total_income": summary["total_income"],
+        "total_expense": summary["total_expense"],
+        "total_savings": summary["total_savings"],
+        "savings_rate": summary["savings_rate"],
         "currency": current_user.currency
     }
 
@@ -90,45 +52,8 @@ async def get_category_breakdown(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    today = date.today()
-    start_of_month = date(today.year, today.month, 1)
-    
-    # Total expenses first
-    total_res = await db.execute(
-        select(func.sum(Transaction.amount)).where(
-            and_(
-                Transaction.user_id == current_user.id,
-                Transaction.type == "expense",
-                Transaction.transaction_date >= start_of_month
-            )
-        )
-    )
-    total_expense = float(total_res.scalar() or 0.0)
-    
-    # Breakdown query
-    breakdown_res = await db.execute(
-        select(Transaction.category, func.sum(Transaction.amount))
-        .where(
-            and_(
-                Transaction.user_id == current_user.id,
-                Transaction.type == "expense",
-                Transaction.transaction_date >= start_of_month
-            )
-        )
-        .group_by(Transaction.category)
-    )
-    
-    breakdown = []
-    for category, amount in breakdown_res.all():
-        amt = float(amount or 0.0)
-        percentage = round((amt / total_expense) * 100, 2) if total_expense > 0 else 0.0
-        breakdown.append({
-            "category": category,
-            "amount": amt,
-            "percentage": percentage
-        })
-        
-    return breakdown
+    return await get_category_breakdown(current_user.id, db)
+
 
 @router.get("/health-score")
 async def get_health_score(
@@ -247,9 +172,40 @@ async def get_health_score(
     }
 
 @router.get("/daily-tip")
-async def get_daily_tip(current_user: User = Depends(get_current_user)):
+async def get_daily_tip(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    try:
+        from google import genai
+        from google.genai import types
+        from backend.app.config import settings
+        from backend.app.ai.context_builder import build_context
+        
+        if settings.GEMINI_API_KEY:
+            client = genai.Client(api_key=settings.GEMINI_API_KEY)
+            context = await build_context(current_user.id, db)
+            prompt = (
+                f"أنت سراج، مستشار مالي شخصي ذكي في السعودية.\n"
+                f"بناءً على الوضع المالي للمستخدم أدناه:\n"
+                f"{context}\n\n"
+                f"قدم نصيحة مالية يومية قصيرة جداً ومفيدة ومخصصة باللهجة السعودية البيضاء الودية.\n"
+                f"الشروط:\n"
+                f"- سطر واحد فقط لا يزيد عن 15-20 كلمة.\n"
+                f"- لا تضف أي عنوان مثل 'نصيحة اليوم:' أو غيره، ابدأ بالنصيحة مباشرة."
+            )
+            response = client.models.generate_content(
+                model='gemini-3.5-flash',
+                contents=prompt,
+                config=types.GenerateContentConfig(temperature=0.7)
+            )
+            if response.text:
+                return {"tip": response.text.strip()}
+    except Exception as e:
+        print(f"Error generating dynamic daily tip: {e}")
+
     # Select a deterministic or random tip
-    random.seed(date.today().toordinal())
+    random.seed(date.today().toordinal() + hash(current_user.id) % 10000)
     tip = random.choice(TIPS)
     return {"tip": tip}
 

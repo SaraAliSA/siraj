@@ -96,7 +96,70 @@ async def list_user_investments(
     return result.scalars().all()
 
 @router.get("/recommendations", response_model=List[InvestmentRecommendation])
-async def get_investment_recommendations(current_user: User = Depends(get_current_user)):
+async def get_investment_recommendations(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    try:
+        import json
+        from google import genai
+        from google.genai import types
+        from backend.app.config import settings
+        from backend.app.ai.context_builder import build_context
+        
+        if settings.GEMINI_API_KEY:
+            client = genai.Client(api_key=settings.GEMINI_API_KEY)
+            context = await build_context(current_user.id, db)
+            prompt = (
+                f"بناءً على الملف المالي للمستخدم التالي:\n"
+                f"{context}\n\n"
+                f"الفرص الاستثمارية المتاحة:\n"
+                f"{json.dumps(INVESTMENT_OPPORTUNITIES, ensure_ascii=False)}\n\n"
+                f"قم بتحليل الوضع المالي للمستخدم وحجم مدخراته ونسبة ادخاره، ثم اختر أفضل الفرص الاستثمارية الملائمة له.\n"
+                f"لكل فرصة ملائمة، حدد درجة الملاءمة (recommendation_score) بين 0 و 100، واكتب تبريراً مالياً ذكياً وموجزاً باللغة العربية (باللهجة السعودية البيضاء الودية) يوضح للمستخدم لماذا هذه الفرصة تناسبه ماليّاً وبطريقة تشجعه على استغلالها بطريقة صحيحة.\n"
+                f"يجب أن تكون التبريرات متوافقة ماليّاً وتعتمد على بياناته الفعلية."
+            )
+            
+            schema = {
+                "type": "ARRAY",
+                "items": {
+                    "type": "OBJECT",
+                    "properties": {
+                        "opportunity_id": {"type": "STRING", "description": "The exact 'id' of the investment opportunity from the input list."},
+                        "recommendation_score": {"type": "INTEGER", "description": "Recommendation score out of 100."},
+                        "rationale": {"type": "STRING", "description": "Detailed personalized reason in Arabic (Saudi dialect style) why this opportunity is good for this user."}
+                    },
+                    "required": ["opportunity_id", "recommendation_score", "rationale"]
+                }
+            }
+            
+            response = client.models.generate_content(
+                model='gemini-3.5-flash',
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=schema,
+                    temperature=0.3
+                )
+            )
+            
+            if response.text:
+                parsed = json.loads(response.text)
+                opp_map = {o["id"]: o for o in INVESTMENT_OPPORTUNITIES}
+                recs = []
+                for item in parsed:
+                    opp = opp_map.get(item["opportunity_id"])
+                    if opp:
+                        recs.append({
+                            "opportunity": opp,
+                            "recommendation_score": item["recommendation_score"],
+                            "rationale": item["rationale"]
+                        })
+                if recs:
+                    return recs
+    except Exception as e:
+        print(f"Error generating dynamic investment recommendations: {e}")
+
     # Basic rule-based dynamic recommendations matching user profile
     # For MVP we return customized recommendation scores & Arabic reasons
     recommendations = [
@@ -117,3 +180,4 @@ async def get_investment_recommendations(current_user: User = Depends(get_curren
         }
     ]
     return recommendations
+
