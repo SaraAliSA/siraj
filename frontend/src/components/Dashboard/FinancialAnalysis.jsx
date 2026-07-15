@@ -1,6 +1,6 @@
 import React from 'react';
 
-const expenseData = [
+const mockExpenseData = [
   { name: 'سكن', percent: 35, color: '#e8734f' },
   { name: 'طعام', percent: 20, color: '#f0997b' },
   { name: 'مواصلات', percent: 15, color: '#6b7280' },
@@ -8,6 +8,17 @@ const expenseData = [
   { name: 'فواتير', percent: 10, color: '#4b5563' },
   { name: 'أخرى', percent: 8, color: '#374151' },
 ];
+
+const categoryColors = {
+  'الراتب': '#16a34a',
+  'السكن والخدمات': '#e8734f',
+  'الغذاء والبقالة': '#f0997b',
+  'النقل والسيارات': '#6b7280',
+  'الترفيه والمطاعم': '#f59e0b',
+  'الفواتير والالتزامات': '#4b5563',
+  'التسوق والمستلزمات': '#374151',
+  'عام': '#d1d5db',
+};
 
 function DonutChart({ data }) {
   const radius = 45;
@@ -40,22 +51,27 @@ function DonutChart({ data }) {
   );
 }
 
-export default function FinancialAnalysis({ score = 72 }) {
+export default function FinancialAnalysis({ score = 72, grade, insights, categoryBreakdown = [] }) {
   const gaugeRadius = 50;
   const gaugeCircumference = Math.PI * gaugeRadius;
   const gaugeProgress = (score / 100) * gaugeCircumference;
 
-  const getLabel = (s) => {
-    if (s >= 75) return 'ممتاز';
-    if (s >= 50) return 'جيد';
-    return 'يحتاج تحسين';
-  };
+  const displayGrade = grade || (score >= 75 ? 'ممتاز' : score >= 50 ? 'جيد' : 'يحتاج تحسين');
+  const displayInsights = insights || 'ملخص أدائك المالي لهذا الشهر';
+
+  const displayData = categoryBreakdown.length > 0
+    ? categoryBreakdown.map((item, idx) => ({
+        name: item.category,
+        percent: Math.round(item.percentage),
+        color: categoryColors[item.category] || `hsl(${(idx * 55) % 360}, 70%, 60%)`,
+      }))
+    : mockExpenseData;
 
   return (
     <div className="analysis-section">
       <div className="analysis-header">
         <h2 className="analysis-title">التحليلات المالية</h2>
-        <p className="analysis-subtitle">ملخص أدائك المالي لهذا الشهر</p>
+        <p className="analysis-subtitle">{displayInsights}</p>
       </div>
 
       <div className="analysis-cards-row">
@@ -64,18 +80,18 @@ export default function FinancialAnalysis({ score = 72 }) {
           <p className="analysis-card-title">توزيع المصروفات</p>
           <div className="donut-card-body-vertical">
             <div className="donut-chart-wrapper">
-                <DonutChart data={expenseData} />
+              <DonutChart data={displayData} />
             </div>
             <div className="donut-legend-grid">
-                {expenseData.map((item) => (
+              {displayData.map((item) => (
                 <div key={item.name} className="donut-legend-item">
-                    <span className="donut-legend-dot" style={{ backgroundColor: item.color }} />
-                    <span className="donut-legend-label">{item.name}</span>
-                    <span className="donut-legend-percent">{item.percent}%</span>
+                  <span className="donut-legend-dot" style={{ backgroundColor: item.color }} />
+                  <span className="donut-legend-label">{item.name}</span>
+                  <span className="donut-legend-percent">{item.percent}%</span>
                 </div>
-                ))}
+              ))}
             </div>
-            </div>
+          </div>
         </div>
 
         {/* Health Score Card */}
@@ -99,7 +115,7 @@ export default function FinancialAnalysis({ score = 72 }) {
             />
           </svg>
           <p className="gauge-score">{score}</p>
-          <p className="gauge-label">{getLabel(score)}</p>
+          <p className="gauge-label">{displayGrade}</p>
         </div>
       </div>
     </div>

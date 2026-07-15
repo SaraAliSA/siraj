@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Send, Sparkles, History, X, Plus, Loader2, Check, Coins } from 'lucide-react';
 import useSavings from '../hooks/useSavings';
+import apiClient from '../api/client';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 const quickChips = [
   'وش وضعي المالي هذا الشهر؟',
@@ -11,43 +14,10 @@ const quickChips = [
 ];
 
 const welcomeMessage = {
+  id: 'welcome-msg',
   role: 'assistant',
   text: 'أهلًا! أنا سراج، مستشارك المالي الذكي. اسألني عن وضعك المالي أو اطلب مني تنفيذ عملية.',
 };
-
-const initialSessions = [
-  {
-    id: 1,
-    title: 'محادثة جديدة',
-    date: 'اليوم',
-    messages: [welcomeMessage],
-  },
-];
-
-function buildReply(text) {
-  if (text.includes('خطة ادخار') || text.includes('توازن ميزانيتي')) {
-    return {
-      tool: 'جاري تحليل ميزانيتك...',
-      reply: 'بناءً على دخلك ومصروفاتك، أقترح تخصص 15% من دخلك الشهري للادخار — يعني حوالي 2,780 ر.س شهريًا. ابدأ بحصالة صغيرة وزود المبلغ تدريجيًا كل ما زاد دخلك.',
-    };
-  }
-  if (text.includes('وضعي المالي') || text.includes('تحليل')) {
-    return {
-      tool: 'جاري تحليل معاملاتك...',
-      reply: 'وضعك المالي هذا الشهر جيد 👍 دخلك 18,540 ر.س ومصروفاتك 11,280 ر.س، يعني نسبة ادخار حوالي 39%. أعلى مصروف عندك بند السكن.',
-    };
-  }
-  if (text.includes('هدف') || text.includes('السفر')) {
-    return {
-      tool: 'جاري مراجعة أهدافك المالية...',
-      reply: 'باقي لك 6,400 ر.س بس عشان توصل لهدف رحلة السفر (20,000 ر.س)، بمعدل ادخارك الحالي بتوصله خلال شهرين تقريبًا.',
-    };
-  }
-  return {
-    tool: 'جاري التفكير...',
-    reply: 'تمام، خلني أساعدك بهذا. تقدر توضح لي أكثر وش تحتاج بالضبط؟',
-  };
-}
 
 function CoinsForm({ onConfirm, onCancel }) {
   const [name, setName] = useState('');
@@ -93,8 +63,8 @@ function CoinsForm({ onConfirm, onCancel }) {
 export default function SirajAIPage() {
   const { addPlan } = useSavings();
   const location = useLocation();
-  const [sessions, setSessions] = useState(initialSessions);
-  const [activeSessionId, setActiveSessionId] = useState(initialSessions[0].id);
+  const [sessions, setSessions] = useState([]);
+  const [activeSessionId, setActiveSessionId] = useState(null);
   const [input, setInput] = useState('');
   const [toolStatus, setToolStatus] = useState(null);
   const [typing, setTyping] = useState(false);
@@ -106,30 +76,86 @@ export default function SirajAIPage() {
   const activeSession = sessions.find((s) => s.id === activeSessionId);
   const messages = activeSession?.messages || [];
 
+  // Init sessions on mount
+  useEffect(() => {
+    const initChat = async () => {
+      try {
+        const res = await apiClient.get('/chat/sessions');
+        if (res.data && res.data.length > 0) {
+          const sessList = res.data.map(s => ({
+            id: s.id,
+            title: s.title,
+            date: new Date(s.created_at).toLocaleDateString('ar-SA', { day: 'numeric', month: 'short' }),
+            messages: [welcomeMessage],
+          }));
+          setSessions(sessList);
+          setActiveSessionId(sessList[0].id);
+        } else {
+          // Create initial session
+          const createRes = await apiClient.post('/chat/sessions', { title: 'مستشار سراج' });
+          const newSess = {
+            id: createRes.data.id,
+            title: createRes.data.title,
+            date: 'الآن',
+            messages: [welcomeMessage],
+          };
+          setSessions([newSess]);
+          setActiveSessionId(createRes.data.id);
+        }
+      } catch (err) {
+        console.error('Failed to init chat sessions:', err);
+      }
+    };
+    initChat();
+  }, []);
+
+  // Fetch messages for active session when it changes
+  useEffect(() => {
+    if (!activeSessionId) return;
+    const fetchMessages = async () => {
+      try {
+        const res = await apiClient.get(`/chat/sessions/${activeSessionId}/messages`);
+        const mappedMsgs = res.data.map(m => ({
+          id: m.id,
+          role: m.role,
+          text: m.content,
+        }));
+        
+        setSessions(prev => prev.map(s => 
+          s.id === activeSessionId 
+            ? { ...s, messages: mappedMsgs.length > 0 ? mappedMsgs : [welcomeMessage] } 
+            : s
+        ));
+      } catch (err) {
+        console.error('Failed to load messages for session:', err);
+      }
+    };
+    fetchMessages();
+  }, [activeSessionId]);
+
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, toolStatus, typing, pendingAction]);
 
   useEffect(() => {
-    if (location.state?.initialPrompt && !hasSentInitialPrompt.current) {
+    if (location.state?.initialPrompt && !hasSentInitialPrompt.current && sessions.length > 0) {
       hasSentInitialPrompt.current = true;
-
-      const newSession = {
-        id: Date.now(),
-        title: 'محادثة جديدة',
-        date: 'الآن',
-        messages: [welcomeMessage],
-      };
-      setSessions((prev) => [newSession, ...prev]);
-      setActiveSessionId(newSession.id);
-
-      setTimeout(() => {
-        send(location.state.initialPrompt, newSession.id);
-      }, 0);
-
+      const initialPromptText = location.state.initialPrompt;
+      
+      // If we have an active session, send it, otherwise create one
+      let sessionId = activeSessionId;
+      if (!sessionId && sessions.length > 0) {
+        sessionId = sessions[0].id;
+      }
+      
+      if (sessionId) {
+        setTimeout(() => {
+          send(initialPromptText, sessionId);
+        }, 300);
+      }
       window.history.replaceState({}, document.title);
     }
-  }, []);
+  }, [sessions]);
 
   const addMessage = (msg, targetSessionId) => {
     setSessions((prev) =>
@@ -137,10 +163,22 @@ export default function SirajAIPage() {
     );
   };
 
-  const send = (text, targetSessionId = activeSessionId) => {
+  const updateMessageText = (tempId, newText, targetSessionId) => {
+    setSessions((prev) =>
+      prev.map((s) => {
+        if (s.id !== targetSessionId) return s;
+        const updatedMsgs = s.messages.map((m) =>
+          m.id === tempId ? { ...m, text: newText } : m
+        );
+        return { ...s, messages: updatedMsgs };
+      })
+    );
+  };
+
+  const send = async (text, targetSessionId = activeSessionId) => {
     if (!text.trim()) return;
 
-    addMessage({ role: 'user', text }, targetSessionId);
+    addMessage({ id: Date.now().toString(), role: 'user', text }, targetSessionId);
     setInput('');
     setPendingAction(null);
 
@@ -150,7 +188,7 @@ export default function SirajAIPage() {
       setTimeout(() => {
         setToolStatus(null);
         addMessage(
-          { role: 'assistant', text: 'تمام، عبّي التفاصيل التالية عشان أنشئ لك الحصالة 👇' },
+          { id: Date.now().toString(), role: 'assistant', text: 'تمام، عبّي التفاصيل التالية عشان أنشئ لك الحصالة 👇' },
           targetSessionId
         );
         setPendingAction({ type: 'create_piggybank', sessionId: targetSessionId });
@@ -158,52 +196,115 @@ export default function SirajAIPage() {
       return;
     }
 
-    const { tool, reply } = buildReply(text);
+    setTyping(true);
 
-    setToolStatus(tool);
-    setTimeout(() => {
-      setToolStatus(null);
-      setTyping(true);
-      setTimeout(() => {
-        setTyping(false);
-        addMessage({ role: 'assistant', text: reply }, targetSessionId);
-      }, 900);
-    }, 1100);
+    try {
+      const token = localStorage.getItem('siraj_token');
+      const response = await fetch(`${API_BASE_URL}/chat/sessions/${targetSessionId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ content: text }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to stream assistant reply');
+      }
+
+      setTyping(false);
+      const assistantMessageId = Date.now().toString();
+      addMessage({ id: assistantMessageId, role: 'assistant', text: '' }, targetSessionId);
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let done = false;
+      let accumulatedText = '';
+
+      while (!done) {
+        const { value, done: readerDone } = await reader.read();
+        done = readerDone;
+        if (value) {
+          const chunkStr = decoder.decode(value, { stream: true });
+          const lines = chunkStr.split('\n');
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const dataStr = line.substring(6).trim();
+              if (dataStr) {
+                try {
+                  const parsed = JSON.parse(dataStr);
+                  if (parsed.content) {
+                    accumulatedText += parsed.content;
+                    updateMessageText(assistantMessageId, accumulatedText, targetSessionId);
+                  }
+                } catch (e) {
+                  // Ignore parsing metadata or partial JSON lines
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Chat error:', err);
+      setTyping(false);
+      addMessage(
+        { id: Date.now().toString(), role: 'assistant', text: 'عذراً، واجهت مشكلة في الاتصال بالخادم. يرجى المحاولة مرة أخرى.' },
+        targetSessionId
+      );
+    }
   };
 
-  const confirmCoins = (name, amount) => {
+  const confirmCoins = async (name, amount) => {
     const sessionId = pendingAction.sessionId;
     setPendingAction(null);
     setToolStatus('جاري إنشاء الحصالة...');
-    setTimeout(() => {
-      setToolStatus(null);
-      addPlan(name, amount);
+    
+    const res = await addPlan(name, amount, 12); // Default 12 months
+    setToolStatus(null);
+    if (res.success) {
       addMessage(
         {
+          id: Date.now().toString(),
           role: 'assistant',
           text: `تم إنشاء حصالة "${name}" بنجاح ✅ بإيداع شهري ${Number(amount).toLocaleString()} ر.س. تقدر تتابعها من صفحة الادخار.`,
         },
         sessionId
       );
-    }, 1000);
+    } else {
+      addMessage(
+        {
+          id: Date.now().toString(),
+          role: 'assistant',
+          text: `فشل إنشاء الحصالة: ${res.error}`,
+        },
+        sessionId
+      );
+    }
   };
 
   const cancelCoins = () => {
     const sessionId = pendingAction.sessionId;
     setPendingAction(null);
-    addMessage({ role: 'assistant', text: 'تمام، ألغيت العملية. أي شي ثاني أقدر أساعدك فيه؟' }, sessionId);
+    addMessage({ id: Date.now().toString(), role: 'assistant', text: 'تمام، ألغيت العملية. أي شي ثاني أقدر أساعدك فيه؟' }, sessionId);
   };
 
-  const startNewChat = () => {
-    const newSession = {
-      id: Date.now(),
-      title: 'محادثة جديدة',
-      date: 'الآن',
-      messages: [welcomeMessage],
-    };
-    setSessions((prev) => [newSession, ...prev]);
-    setActiveSessionId(newSession.id);
-    setShowSessions(false);
+  const startNewChat = async () => {
+    try {
+      const createRes = await apiClient.post('/chat/sessions', { title: 'محادثة استشارية' });
+      const newSess = {
+        id: createRes.data.id,
+        title: createRes.data.title,
+        date: 'الآن',
+        messages: [welcomeMessage],
+      };
+      setSessions((prev) => [newSess, ...prev]);
+      setActiveSessionId(newSess.id);
+      setShowSessions(false);
+    } catch (err) {
+      console.error('Failed to create new session:', err);
+    }
   };
 
   const switchSession = (id) => {
@@ -220,8 +321,8 @@ export default function SirajAIPage() {
             <Sparkles size={17} />
           </div>
           <div>
-           <p className="siraj-chat-name">سراج</p>
-           <p className="siraj-chat-status">متصل الآن</p>
+            <p className="siraj-chat-name">سراج</p>
+            <p className="siraj-chat-status">متصل الآن</p>
           </div>
         </div>
         <button className="siraj-history-btn" onClick={() => setShowSessions(true)}>
@@ -232,8 +333,8 @@ export default function SirajAIPage() {
       {/* Messages */}
       <div className="siraj-chat-messages">
         {messages.map((m, i) => (
-          <div key={i} className={`siraj-msg-row ${m.role === 'user' ? 'user' : 'assistant'}`}>
-            <div className={`siraj-msg-bubble ${m.role === 'user' ? 'user' : 'assistant'}`}>
+          <div key={m.id || i} className={`siraj-msg-row ${m.role === 'user' ? 'user' : 'assistant'}`}>
+            <div className={`siraj-msg-bubble ${m.role === 'user' ? 'user' : 'assistant'}`} style={{ whiteSpace: 'pre-wrap' }}>
               {m.text}
             </div>
           </div>

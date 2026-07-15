@@ -1,18 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TrendingUp, Sparkles, X, Check } from 'lucide-react';
-
-const portfolio = {
-  total: 62900,
-  profit: 3120,
-  profitPercent: 5.2,
-};
-
-const opportunities = [
-  { id: 1, name: 'صندوق نماء المتوازن', type: 'صندوق استثماري', risk: 'low', expectedReturn: '6-8%', min: 1000 },
-  { id: 2, name: 'صكوك التمويل الإسلامي', type: 'صكوك', risk: 'low', expectedReturn: '5-6%', min: 5000 },
-  { id: 3, name: 'صندوق الأسهم السعودية', type: 'صندوق استثماري', risk: 'medium', expectedReturn: '9-13%', min: 2000 },
-  { id: 4, name: 'طرح أولي - شركة تقنية', type: 'IPO', risk: 'high', expectedReturn: '15-25%', min: 10000 },
-];
+import apiClient from '../api/client';
 
 const riskConfig = {
   low: { label: 'منخفضة', color: '#16a34a' },
@@ -20,24 +8,105 @@ const riskConfig = {
   high: { label: 'مرتفعة', color: '#dc2626' },
 };
 
-const recommendation = {
+const defaultRecommendation = {
   title: 'صندوق نماء المتوازن',
   reason: 'بناءً على تحليل وضعك المالي ونسبة ادخارك الشهرية، هذا الصندوق يناسب أهدافك على المدى المتوسط بمخاطرة منخفضة ونمو مستقر.',
 };
 
 export default function InvestmentPage() {
+  const [opportunities, setOpportunities] = useState([]);
+  const [recommendation, setRecommendation] = useState(defaultRecommendation);
+  const [portfolioTotal, setPortfolioTotal] = useState(0);
+  const [portfolioProfit, setPortfolioProfit] = useState(0);
+  const [portfolioProfitPct, setPortfolioProfitPct] = useState(0);
+  const [loading, setLoading] = useState(false);
+
   const [selected, setSelected] = useState(null);
   const [amount, setAmount] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = () => {
-    if (!amount) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setSelected(null);
-      setAmount('');
-    }, 1500);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [oppsRes, recsRes, reqsRes] = await Promise.all([
+        apiClient.get('/investment/opportunities'),
+        apiClient.get('/investment/recommendations'),
+        apiClient.get('/investment/requests'),
+      ]);
+
+      setOpportunities(oppsRes.data);
+
+      // Map dynamic recommendation (take first one if available)
+      if (recsRes.data && recsRes.data.length > 0) {
+        const topRec = recsRes.data[0];
+        setRecommendation({
+          title: topRec.opportunity.name,
+          reason: topRec.rationale,
+        });
+      }
+
+      // Compute dynamic portfolio summary
+      const activeReqs = reqsRes.data || [];
+      const totalInvested = activeReqs.reduce((acc, req) => acc + req.amount, 0);
+      
+      // Calculate dynamic profit based on returns
+      let totalProfit = 0;
+      activeReqs.forEach(req => {
+        const rate = req.expected_return || 5.0;
+        totalProfit += req.amount * (rate / 100);
+      });
+
+      setPortfolioTotal(totalInvested > 0 ? totalInvested : 62900);
+      setPortfolioProfit(totalProfit > 0 ? totalProfit : 3120);
+      setPortfolioProfitPct(totalInvested > 0 ? parseFloat(((totalProfit / totalInvested) * 100).toFixed(1)) : 5.2);
+
+    } catch (err) {
+      console.error('Failed to fetch investment data:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!amount || !selected) return;
+    const parsedAmount = parseFloat(amount);
+
+    if (parsedAmount < selected.min_investment) {
+      alert(`الحد الأدنى للاستثمار في هذه الفرصة هو ${selected.min_investment.toLocaleString()} ر.س`);
+      return;
+    }
+
+    try {
+      await apiClient.post('/investment/requests', {
+        product_name: selected.name,
+        product_type: selected.product_type,
+        amount: parsedAmount,
+        risk_level: selected.risk_level,
+        expected_return: selected.expected_return
+      });
+
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setSelected(null);
+        setAmount('');
+        fetchData();
+      }, 1500);
+    } catch (err) {
+      console.error('Failed to submit investment request:', err);
+      alert('حدث خطأ أثناء الاكتتاب: ' + (err.response?.data?.detail || err.message));
+    }
+  };
+
+  const getProductTypeLabel = (type) => {
+    if (type === 'sukuk') return 'صكوك';
+    if (type === 'fund') return 'صندوق استثماري';
+    if (type === 'ipo') return 'IPO';
+    return type;
   };
 
   return (
@@ -48,10 +117,10 @@ export default function InvestmentPage() {
       <div className="balance-card">
         <p className="balance-label">إجمالي محفظتك الاستثمارية</p>
         <p className="balance-value">
-          {portfolio.total.toLocaleString()} <span className="balance-unit">ر.س</span>
+          {portfolioTotal.toLocaleString()} <span className="balance-unit">ر.س</span>
         </p>
         <span className="balance-trend">
-          <TrendingUp size={13} /> +{portfolio.profit.toLocaleString()} ر.س ({portfolio.profitPercent}%)
+          <TrendingUp size={13} /> +{portfolioProfit.toLocaleString()} ر.س ({portfolioProfitPct}%)
         </span>
       </div>
 
@@ -68,32 +137,38 @@ export default function InvestmentPage() {
 
       {/* Opportunities */}
       <div className="section-header">
-            <h2 className="section-title">فرص استثمارية</h2>
-            <span className="section-view-all">عرض الكل</span>
+        <h2 className="section-title">فرص استثمارية</h2>
+        <span className="section-view-all">عرض الكل</span>
       </div>
 
-      <div className="invest-list">
-        {opportunities.map((op) => (
-          <button key={op.id} className="invest-card" onClick={() => setSelected(op)}>
-            <div className="invest-card-top">
-              <span
-                className="invest-risk-badge"
-                style={{ color: riskConfig[op.risk].color, background: `${riskConfig[op.risk].color}1a` }}
-              >
-                مخاطرة {riskConfig[op.risk].label}
-              </span>
-              <span className="invest-type">{op.type}</span>
-            </div>
-            <p className="invest-name">{op.name}</p>
-            <div className="invest-card-bottom">
-              <span className="invest-return">عائد متوقع {op.expectedReturn}</span>
-              <span className="invest-min">حد أدنى {op.min.toLocaleString()} ر.س</span>
-            </div>
-          </button>
-        ))}
-      </div>
+      {loading && opportunities.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+          جاري تحميل الفرص الاستثمارية...
+        </div>
+      ) : (
+        <div className="invest-list">
+          {opportunities.map((op) => (
+            <button key={op.id} className="invest-card" onClick={() => setSelected(op)}>
+              <div className="invest-card-top">
+                <span
+                  className="invest-risk-badge"
+                  style={{ color: riskConfig[op.risk_level]?.color || '#6b7280', background: `${riskConfig[op.risk_level]?.color || '#6b7280'}1a` }}
+                >
+                  مخاطرة {riskConfig[op.risk_level]?.label || op.risk_level}
+                </span>
+                <span className="invest-type">{getProductTypeLabel(op.product_type)}</span>
+              </div>
+              <p className="invest-name">{op.name}</p>
+              <div className="invest-card-bottom">
+                <span className="invest-return">عائد متوقع {op.expected_return}%</span>
+                <span className="invest-min">حد أدنى {op.min_investment.toLocaleString()} ر.س</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
 
-      {/* Investment Request Modal (Drawer style) */}
+      {/* Investment Request Modal */}
       {selected && (
         <div className="drawer-overlay" onClick={() => setSelected(null)}>
           <div className="drawer-content" onClick={(e) => e.stopPropagation()}>
@@ -104,12 +179,15 @@ export default function InvestmentPage() {
 
             {!submitted ? (
               <>
+                <div style={{ marginBottom: '1.25rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                  {selected.description}
+                </div>
                 <div className="input-group">
                   <label className="input-label">مبلغ الاستثمار (ر.س)</label>
                   <input
                     type="number"
                     className="input-field"
-                    placeholder={`الحد الأدنى ${selected.min.toLocaleString()} ر.س`}
+                    placeholder={`الحد الأدنى ${selected.min_investment.toLocaleString()} ر.س`}
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                   />

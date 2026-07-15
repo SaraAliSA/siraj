@@ -1,42 +1,103 @@
-import React, { useState } from 'react';
-import { User, Car, Home, GraduationCap, Clock, CheckCircle2, XCircle, ChevronLeft } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, Car, Home, GraduationCap, Clock, CheckCircle2, XCircle, ChevronLeft, Coins } from 'lucide-react';
+import apiClient from '../api/client';
 
-const products = [
-  { id: 'personal', label: 'تمويل شخصي', icon: User, desc: 'حتى 200,000 ر.س بدون كفيل' },
-  { id: 'auto', label: 'تمويل السيارات', icon: Car, desc: 'تمويل حتى 90% من قيمة السيارة' },
-  { id: 'home', label: 'التمويل العقاري', icon: Home, desc: 'تمويل يصل إلى 25 سنة' },
-];
+const productIcons = {
+  personal: User,
+  auto: Car,
+  home: Home,
+  education: GraduationCap,
+  business: Coins,
+};
 
 const statusSteps = ['قيد المراجعة', 'تحت التقييم', 'موافقة نهائية'];
 
-const mockRequests = [
-  { id: 1, type: 'تمويل شخصي', amount: 45000, status: 1, date: 'قبل يومين' },
-];
+const statusMap = {
+  pending: 0,
+  under_review: 1,
+  approved: 2,
+  rejected: 2, // Map to final step but with a rejection visual style if needed, or simply 2
+};
 
-const mockHistory = [
-  { id: 1, type: 'تمويل سيارة', amount: 90000, date: '2024', status: 'مكتمل' },
-];
+const getStatusIndex = (status) => {
+  if (statusMap[status] !== undefined) return statusMap[status];
+  return 0;
+};
+
+const getStatusLabel = (status) => {
+  if (status === 'pending') return 'قيد المراجعة';
+  if (status === 'under_review') return 'تحت التقييم';
+  if (status === 'approved') return 'تمت الموافقة';
+  if (status === 'rejected') return 'مرفوض';
+  return status;
+};
 
 const tabs = ['تمويل جديد', 'متابعة الطلبات', 'سجل التمويل'];
 
 export default function FinancingPage() {
   const [tab, setTab] = useState(tabs[0]);
+  const [products, setProducts] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  
+  // Form fields
   const [amount, setAmount] = useState('');
   const [term, setTerm] = useState('');
+  const [notes, setNotes] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = () => {
-    if (!selectedProduct || !amount || !term) return;
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setSelectedProduct(null);
-      setAmount('');
-      setTerm('');
-      setTab('متابعة الطلبات');
-    }, 1500);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      const [productsRes, requestsRes] = await Promise.all([
+        apiClient.get('/financing/products'),
+        apiClient.get('/financing/requests'),
+      ]);
+      setProducts(productsRes.data);
+      setRequests(requestsRes.data);
+    } catch (err) {
+      console.error('Failed to fetch financing data:', err);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!selectedProduct || !amount || !term) return;
+
+    try {
+      await apiClient.post('/financing/requests', {
+        product_type: selectedProduct.product_type,
+        amount: parseFloat(amount),
+        term_months: parseInt(term),
+        notes: notes || `طلب تمويل ${selectedProduct.name} عن طريق تطبيق سراج`
+      });
+      setSubmitted(true);
+      setTimeout(() => {
+        setSubmitted(false);
+        setSelectedProduct(null);
+        setAmount('');
+        setTerm('');
+        setNotes('');
+        // Refresh requests and switch tab
+        fetchData();
+        setTab('متابعة الطلبات');
+      }, 1500);
+    } catch (err) {
+      console.error('Failed to submit financing request:', err);
+      alert('حدث خطأ أثناء إرسال الطلب: ' + (err.response?.data?.detail || err.message));
+    }
+  };
+
+  // Active requests (pending / under_review)
+  const activeRequests = requests.filter(r => r.status === 'pending' || r.status === 'under_review');
+  // Historic requests (approved / rejected)
+  const historicRequests = requests.filter(r => r.status === 'approved' || r.status === 'rejected');
 
   return (
     <div className="fin-page">
@@ -54,31 +115,49 @@ export default function FinancingPage() {
         ))}
       </div>
 
+      {loading && products.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+          جاري تحميل المنتجات والطلبات...
+        </div>
+      )}
+
       {tab === 'تمويل جديد' && !selectedProduct && (
         <div className="fin-products-grid">
-          {products.map(({ id, label, icon: Icon, desc }) => (
-            <button key={id} className="fin-product-card" onClick={() => setSelectedProduct(id)}>
-              <div className="fin-product-icon">
-                <Icon size={20} />
-              </div>
-              <p className="fin-product-label">{label}</p>
-              <p className="fin-product-desc">{desc}</p>
-            </button>
-          ))}
+          {products.map((p) => {
+            const Icon = productIcons[p.product_type] || User;
+            return (
+              <button key={p.id} className="fin-product-card" onClick={() => setSelectedProduct(p)}>
+                <div className="fin-product-icon">
+                  <Icon size={20} />
+                </div>
+                <p className="fin-product-label">{p.name}</p>
+                <p className="fin-product-desc" style={{ fontSize: '0.8rem', color: 'var(--accent)', fontWeight: 'bold' }}>
+                  نسبة المرابحة: {p.profit_rate}%
+                </p>
+                <p className="fin-product-desc">{p.description.substring(0, 75)}...</p>
+              </button>
+            );
+          })}
         </div>
       )}
 
       {tab === 'تمويل جديد' && selectedProduct && !submitted && (
         <div className="fin-form-card">
           <p className="fin-form-title">
-            {products.find((p) => p.id === selectedProduct)?.label}
+            تقديم طلب: {selectedProduct.name}
           </p>
+          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '1.25rem' }}>
+            الحد الأدنى: {selectedProduct.min_amount.toLocaleString()} ر.س | الحد الأقصى: {selectedProduct.max_amount.toLocaleString()} ر.س
+            <br />
+            فترة السداد: {selectedProduct.min_term_months} - {selectedProduct.max_term_months} شهر
+          </p>
+          
           <div className="input-group">
             <label className="input-label">المبلغ المطلوب (ر.س)</label>
             <input
               type="number"
               className="input-field"
-              placeholder="مثال: 50000"
+              placeholder={`مثال: ${selectedProduct.min_amount}`}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
@@ -88,11 +167,22 @@ export default function FinancingPage() {
             <input
               type="number"
               className="input-field"
-              placeholder="مثال: 36"
+              placeholder={`مثال: ${selectedProduct.max_term_months}`}
               value={term}
               onChange={(e) => setTerm(e.target.value)}
             />
           </div>
+          <div className="input-group">
+            <label className="input-label">ملاحظات إضافية (اختياري)</label>
+            <input
+              type="text"
+              className="input-field"
+              placeholder="مثال: شراء مستلزمات تأثيث"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </div>
+          
           <div className="fin-form-actions">
             <button className="btn btn-secondary" onClick={() => setSelectedProduct(null)}>
               رجوع
@@ -113,43 +203,67 @@ export default function FinancingPage() {
 
       {tab === 'متابعة الطلبات' && (
         <div className="fin-requests-list">
-          {mockRequests.map((r) => (
-            <div key={r.id} className="fin-request-card">
-              <div className="fin-request-header">
-                <span className="fin-request-type">{r.type}</span>
-                <span className="fin-request-amount">{r.amount.toLocaleString()} ر.س</span>
-              </div>
-              <div className="fin-status-track">
-                {statusSteps.map((step, i) => (
-                  <div key={step} className={`fin-status-step ${i <= r.status ? 'done' : ''}`}>
-                    <div className="fin-status-dot" />
-                    <span>{step}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="fin-request-date">
-                <Clock size={12} /> {r.date}
-              </p>
+          {activeRequests.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+              لا توجد طلبات تمويل نشطة حالياً.
             </div>
-          ))}
+          ) : (
+            activeRequests.map((r) => {
+              const productName = products.find(p => p.product_type === r.product_type)?.name || r.product_type;
+              const statusIdx = getStatusIndex(r.status);
+              return (
+                <div key={r.id} className="fin-request-card">
+                  <div className="fin-request-header">
+                    <span className="fin-request-type">{productName}</span>
+                    <span className="fin-request-amount">{r.amount.toLocaleString()} ر.س</span>
+                  </div>
+                  <div className="fin-status-track">
+                    {statusSteps.map((step, i) => (
+                      <div key={step} className={`fin-status-step ${i <= statusIdx ? 'done' : ''}`}>
+                        <div className="fin-status-dot" />
+                        <span>{step}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="fin-request-date">
+                    <Clock size={12} /> السداد على {r.term_months} شهر | {r.notes}
+                  </p>
+                </div>
+              );
+            })
+          )}
         </div>
       )}
 
       {tab === 'سجل التمويل' && (
         <div className="fin-history-list">
-          {mockHistory.map((h) => (
-            <div key={h.id} className="fin-history-item">
-              <div className="fin-history-icon">
-                <CheckCircle2 size={16} color="#16a34a" />
-              </div>
-              <div className="fin-history-info">
-                <p className="fin-history-type">{h.type}</p>
-                <p className="fin-history-date">{h.date}</p>
-              </div>
-              <p className="fin-history-amount">{h.amount.toLocaleString()} ر.س</p>
-              <ChevronLeft size={14} color="var(--text-secondary)" />
+          {historicRequests.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+              سجل التمويل فارغ.
             </div>
-          ))}
+          ) : (
+            historicRequests.map((h) => {
+              const productName = products.find(p => p.product_type === h.product_type)?.name || h.product_type;
+              const isApproved = h.status === 'approved';
+              return (
+                <div key={h.id} className="fin-history-item">
+                  <div className="fin-history-icon">
+                    {isApproved ? (
+                      <CheckCircle2 size={16} color="#16a34a" />
+                    ) : (
+                      <XCircle size={16} color="#dc2626" />
+                    )}
+                  </div>
+                  <div className="fin-history-info">
+                    <p className="fin-history-type">{productName}</p>
+                    <p className="fin-history-date">{getStatusLabel(h.status)} — السداد على {h.term_months} شهر</p>
+                  </div>
+                  <p className="fin-history-amount">{h.amount.toLocaleString()} ر.س</p>
+                  <ChevronLeft size={14} color="var(--text-secondary)" />
+                </div>
+              );
+            })
+          )}
         </div>
       )}
     </div>

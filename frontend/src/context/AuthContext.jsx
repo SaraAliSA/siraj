@@ -13,9 +13,15 @@ export const AuthProvider = ({ children }) => {
     const savedToken = localStorage.getItem('siraj_token');
     const savedUser = localStorage.getItem('siraj_user');
 
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+    if (savedToken && savedUser && savedUser !== 'undefined') {
+      try {
+        setToken(savedToken);
+        setUser(JSON.parse(savedUser));
+      } catch (err) {
+        console.error('Failed to parse saved user:', err);
+        localStorage.removeItem('siraj_token');
+        localStorage.removeItem('siraj_user');
+      }
     }
     setLoading(false);
   }, []);
@@ -26,13 +32,13 @@ export const AuthProvider = ({ children }) => {
     try {
       // Attempt API call to backend
       const response = await apiClient.post('/auth/login', { email, password });
-      const { access_token, user_data } = response.data;
+      const { access_token, user } = response.data;
 
       localStorage.setItem('siraj_token', access_token);
-      localStorage.setItem('siraj_user', JSON.stringify(user_data));
+      localStorage.setItem('siraj_user', JSON.stringify(user));
 
       setToken(access_token);
-      setUser(user_data);
+      setUser(user);
       setLoading(false);
       return { success: true };
     } catch (error) {

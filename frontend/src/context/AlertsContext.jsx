@@ -1,36 +1,98 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import apiClient from '../api/client';
 
 export const AlertsContext = createContext(null);
 
-const alertTypes = {
+export const alertTypes = {
   budget: { label: 'تجاوز الميزانية', color: '#dc2626' },
-  spike: { label: 'ارتفاع مفاجئ بالإنفاق', color: '#d97706' },
+  budget_breach: { label: 'تجاوز الميزانية', color: '#dc2626' },
+  spending_spike: { label: 'ارتفاع مفاجئ بالإنفاق', color: '#d97706' },
   bill: { label: 'فاتورة مستحقة', color: '#2563eb' },
   goal: { label: 'إنجاز هدف', color: '#16a34a' },
+  goal_milestone: { label: 'إنجاز هدف', color: '#16a34a' },
 };
 
-const initialAlerts = [
-  { id: 1, type: 'budget', title: 'تجاوزت ميزانية الترفيه', desc: 'صرفت 1,200 ر.س من أصل 900 ر.س المخصصة هذا الشهر', time: 'قبل ساعتين', unread: true },
-  { id: 2, type: 'spike', title: 'ارتفاع بمصروفات التسوق', desc: 'زاد إنفاقك بفئة التسوق 45% مقارنة بالشهر الماضي', time: 'اليوم', unread: true },
-  { id: 3, type: 'bill', title: 'فاتورة الكهرباء مستحقة', desc: 'باقي 3 أيام على موعد سداد فاتورة الكهرباء', time: 'أمس', unread: false },
-  { id: 4, type: 'goal', title: 'اقتربت من هدف الادخار', desc: 'وصلت لـ 90% من هدف "رحلة العمرة"', time: 'قبل يومين', unread: false },
-];
-
 export const AlertsProvider = ({ children }) => {
-  const [alerts, setAlerts] = useState(initialAlerts);
+  const [alerts, setAlerts] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const markAsRead = (id) => {
-    setAlerts((prev) => prev.map((a) => (a.id === id ? { ...a, unread: false } : a)));
+  const fetchAlerts = async () => {
+    try {
+      const response = await apiClient.get('/alerts/');
+      // Map backend alert object to frontend structure
+      const mapped = response.data.map(a => {
+        const typeConfig = alertTypes[a.alert_type] || { label: 'تنبيه مالي', color: '#6b7280' };
+        return {
+          id: a.id,
+          type: a.alert_type,
+          title: typeConfig.label,
+          desc: a.message,
+          time: new Date(a.created_at).toLocaleDateString('ar-SA', { hour: 'numeric', minute: 'numeric' }),
+          unread: !a.is_read
+        };
+      });
+      setAlerts(mapped);
+    } catch (err) {
+      console.error('Failed to fetch alerts:', err);
+    }
   };
 
-  const addAlert = (alert) => {
-    setAlerts((prev) => [{ id: Date.now(), unread: true, time: 'الآن', ...alert }, ...prev]);
+  const fetchUnreadCount = async () => {
+    try {
+      const response = await apiClient.get('/alerts/unread-count');
+      setUnreadCount(response.data.unread_count);
+    } catch (err) {
+      console.error('Failed to get unread count:', err);
+    }
   };
 
-  const unreadCount = alerts.filter((a) => a.unread).length;
+  // Poll for unread alerts every 30 seconds
+  useEffect(() => {
+    fetchAlerts();
+    fetchUnreadCount();
+
+    const interval = setInterval(() => {
+      fetchUnreadCount();
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const markAsRead = async (id) => {
+    try {
+      await apiClient.put(`/alerts/${id}/read`);
+      // Update local state
+      setAlerts(prev => prev.map(a => a.id === id ? { ...a, unread: false } : a));
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (err) {
+      console.error('Failed to mark alert as read:', err);
+    }
+  };
+
+  const addAlert = async (type, category, thresholdAmount, message) => {
+    setLoading(true);
+    try {
+      const response = await apiClient.post('/alerts/', {
+        alert_type: type,
+        category: category || 'عام',
+        threshold_amount: parseFloat(thresholdAmount) || 0.0,
+        message: message,
+        is_active: true
+      });
+      fetchAlerts();
+      fetchUnreadCount();
+      return { success: true, data: response.data };
+    } catch (err) {
+      console.error('Failed to create custom alert:', err);
+      return { success: false, error: err.response?.data?.detail || err.message };
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <AlertsContext.Provider value={{ alerts, alertTypes, markAsRead, addAlert, unreadCount }}>
+    <AlertsContext.Provider value={{ alerts, alertTypes, markAsRead, addAlert, unreadCount, fetchAlerts, loading }}>
       {children}
     </AlertsContext.Provider>
   );

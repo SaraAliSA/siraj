@@ -6,9 +6,12 @@ import useGoals from '../../hooks/useGoals';
 
 const iconMap = {
   budget: AlertTriangle,
+  budget_breach: AlertTriangle,
+  spending_spike: TrendingUp,
   spike: TrendingUp,
   bill: Calendar,
   goal: Trophy,
+  goal_milestone: Trophy,
 };
 
 export default function DashboardPreviewCards() {

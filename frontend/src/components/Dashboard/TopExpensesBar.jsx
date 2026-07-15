@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const data = [
+const mockData = [
   { name: 'سكن', amount: 4200, max: 4200 },
   { name: 'طعام', amount: 2400, max: 4200 },
   { name: 'مواصلات', amount: 1350, max: 4200 },
@@ -9,15 +9,30 @@ const data = [
   { name: 'فواتير', amount: 720, max: 4200 },
 ];
 
-export default function TopExpensesBar() {
+export default function TopExpensesBar({ categoryBreakdown = [] }) {
+  // Sort categoryBreakdown descending by amount and take top 5
+  const sorted = [...categoryBreakdown]
+    .sort((a, b) => b.amount - a.amount)
+    .slice(0, 5);
+
+  const maxAmount = sorted.length > 0 ? Math.max(...sorted.map(s => s.amount)) : 1;
+
+  const displayData = sorted.length > 0
+    ? sorted.map(s => ({
+        name: s.category,
+        amount: s.amount,
+        max: maxAmount,
+      }))
+    : mockData;
+
   return (
     <div className="chart-card">
-    <div className="section-header"> 
-    <h2 className="section-title">أعلى 5 مصروفات</h2>
-  < Link to="/transactions" className="section-view-all">التفاصيل</Link>
-</div>
+      <div className="section-header">
+        <h2 className="section-title">أعلى 5 مصروفات</h2>
+        <Link to="/transactions" className="section-view-all">التفاصيل</Link>
+      </div>
       <div className="expense-bar-list">
-        {data.map((item) => (
+        {displayData.map((item) => (
           <div key={item.name} className="expense-bar-row">
             <div className="expense-bar-info">
               <span className="expense-bar-value">{item.amount.toLocaleString()} ر.س</span>
