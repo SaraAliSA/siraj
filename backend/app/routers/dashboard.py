@@ -48,7 +48,7 @@ async def get_overview(
     }
 
 @router.get("/category-breakdown")
-async def get_category_breakdown(
+async def get_dashboard_category_breakdown(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
